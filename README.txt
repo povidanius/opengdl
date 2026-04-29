@@ -99,9 +99,8 @@ Each coin entry stores the following information:
 
   Catalogue References:
     Ivanauskas          E. Ivanauskas catalogue number
-    Bagdonas            Bagdonas catalogue number
-    Huletski            Huletski / Huletski-Karpaw reference
-    Sarankinas          Sarankinas reference
+    Bagdonas            G. Bagdonas catalogue number
+    Huletski            D. Huletski catalogue reference
     Custom / Other      Any additional catalogue reference
 
   Acquisition:
