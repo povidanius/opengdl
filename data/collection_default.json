@@ -1,0 +1,64 @@
+{
+  "coins": [],
+  "meta": {
+    "collection_name": "",
+    "owner": "",
+    "created": "",
+    "show_prices": true,
+    "per_page": 100
+  },
+  "rulers": {
+    "Kęstutis": {
+      "notes": "",
+      "seals": []
+    },
+    "Jogaila / Władysław II Jagiełło": {
+      "notes": "",
+      "seals": []
+    },
+    "Vladimir Olgerdovich": {
+      "notes": "",
+      "seals": []
+    },
+    "Skirgaila": {
+      "notes": "",
+      "seals": []
+    },
+    "Vytautas the Great": {
+      "notes": "",
+      "seals": []
+    },
+    "Casimir IV Jagiellon": {
+      "notes": "",
+      "seals": []
+    },
+    "Alexander Jagiellon": {
+      "notes": "",
+      "seals": []
+    },
+    "Sigismund I the Old": {
+      "notes": "",
+      "seals": []
+    },
+    "Sigismund II Augustus": {
+      "notes": "",
+      "seals": []
+    },
+    "Stephen Báthory": {
+      "notes": "",
+      "seals": []
+    },
+    "Sigismund III Vasa": {
+      "notes": "",
+      "seals": []
+    },
+    "Władysław IV Vasa": {
+      "notes": "",
+      "seals": []
+    },
+    "John II Casimir Vasa": {
+      "notes": "",
+      "seals": []
+    }
+  }
+}
