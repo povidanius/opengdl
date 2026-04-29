@@ -11,10 +11,12 @@ from pathlib import Path
 from typing import Optional, List, Dict, Any
 
 DB_PATH = Path(__file__).parent / "data" / "collection.json"
+DB_DEFAULT_PATH = Path(__file__).parent / "data" / "collection_default.json"
 
 # Hardcoded ruler reign-start years for canonical sort order
 RULER_REIGN_START = {
-    "Vladimiras Algirdaitis":         1362,
+    "Kęstutis":                       1381,
+    "Vladimir Olgerdovich":           1362,
     "Jogaila / Władysław II Jagiełło": 1377,
     "Skirgaila":                      1386,
     "Vytautas the Great":             1392,
@@ -44,11 +46,13 @@ DENOM_ORDER = {
 
 
 def _load() -> dict:
-    with open(DB_PATH, "r", encoding="utf-8") as f:
+    path = DB_PATH if DB_PATH.exists() else DB_DEFAULT_PATH
+    with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
 def _save(data: dict) -> None:
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(DB_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 

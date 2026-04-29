@@ -201,8 +201,8 @@ RULER_DATA = {
         "portrait": "portrait_vladimir_olgerdovich.jpg",
         "full_name": "Vladimir Olgerdovich",
         "reign": "1362–1394 (Kyiv)",
-        "born": "c. 1338",
-        "died": "c. 1398",
+        "born": "1338",
+        "died": "1398",
         "bio": (
             "Son of Algirdas, Grand Duke of Lithuania. Prince of Kyiv from 1362 to 1394, "
             "when he was displaced by Skirgaila. Issued his own coinage — half-grosz pieces "
@@ -225,7 +225,7 @@ RULER_DATA = {
         "portrait": "vytautas_guagnini.jpg",
         "full_name": "Vytautas the Great",
         "reign": "1392–1430",
-        "born": "c. 1350",
+        "born": "1350",
         "died": "1430",
         "bio": (
             "Lithuania reached its greatest territorial extent under his rule, stretching "
@@ -264,7 +264,7 @@ RULER_DATA = {
         "portrait": "portrait_skirgaila.jpg",
         "full_name": "Skirgaila",
         "reign": "1386–1392",
-        "born": "c. 1354",
+        "born": "1354",
         "died": "1397",
         "bio": (
             "Son of Algirdas and brother of Jogaila. Appointed Grand Duke's viceroy "
