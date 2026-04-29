@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ ruler_name }} · {{ meta.collection_name }}{% endblock %}
+
+{% block content %}
+<div class="form-layout form-layout-narrow">
+
+  <div class="form-header">
+    <nav class="breadcrumb">
+      <a href="{{ url_for('index') }}">Collection</a>
+      <span class="bc-sep">›</span>
+      <a href="{{ url_for('index', ruler=ruler_name) }}">{{ ruler_name }}</a>
+      <span class="bc-sep">›</span>
+      <span>Edit Notes</span>
+    </nav>
+    <h1 class="page-title">{{ ruler.full_name }}</h1>
+    <p class="page-desc">{{ ruler.reign }}</p>
+  </div>
+
+  <!-- Ruler portrait & static facts -->
+  <div class="ruler-edit-header">
+    <div style="width:250px;height:333px;flex-shrink:0;border-radius:8px;overflow:hidden;border:2px solid #b8860b;background:#f5f0e8;">
+      <img src="{{ url_for('static', filename='portraits/' + ruler.portrait) }}"
+           alt="{{ ruler_name }}"
+           style="width:250px;height:333px;object-fit:cover;object-position:top;display:block;"
+           onerror="this.style.display='none'">
+    </div>
+    <div class="ruler-edit-facts">
+      <table class="ref-table">
+        <tr>
+          <td class="ref-key">Full name</td>
+          <td class="ref-val">{{ ruler.full_name }}</td>
+        </tr>
+        <tr>
+          <td class="ref-key">Reign</td>
+          <td class="ref-val">{{ ruler.reign }}</td>
+        </tr>
+        <tr>
+          <td class="ref-key">Born</td>
+          <td class="ref-val">{{ ruler.born }}</td>
+        </tr>
+        <tr>
+          <td class="ref-key">Died</td>
+          <td class="ref-val">{{ ruler.died }}</td>
+        </tr>
+      </table>
+      <p class="ruler-edit-bio">{{ ruler.bio }}</p>
+    </div>
+  </div>
+
+  <!-- Editable notes -->
+  <form method="post" class="coin-form">
+    <fieldset class="form-section">
+      <legend class="form-legend">Custom Notes</legend>
+      <div class="form-group">
+        <label for="notes">Collector's notes</label>
+        <textarea id="notes" name="notes" class="form-textarea" rows="6"
+                  placeholder="Add your personal research notes, collection strategy, or any other information about coins of this ruler…">{{ current_notes }}</textarea>
+        <span class="field-hint">These notes appear on ruler cards and in PDF exports.</span>
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary btn-lg">Save Notes</button>
+      <a href="{{ url_for('index', ruler=ruler_name) }}" class="btn-secondary btn-lg">Cancel</a>
+    </div>
+  </form>
+
+  <!-- Seals -->
+  <div class="re-seals-section">
+    <div class="re-seals-header">
+      <span class="re-seals-title">Known Seals</span>
+      <span class="field-hint">Seal images and titles appear in the ruler strip and in PDF exports.</span>
+    </div>
+    <div class="ruler-seals-grid" id="seals-grid"></div>
+    <div class="seal-add-area">
+      <input class="seal-add-input" id="new-seal-name" type="text" placeholder="New seal name…">
+      <button class="btn-seal-add" id="btn-add-seal">+ Add Seal</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  var RULER = {{ ruler_name | tojson }};
+  var SEALS = {{ seals | tojson }};
+
+  function escH(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderGrid() {
+    var grid = document.getElementById('seals-grid');
+    if (!grid) return;
+    if (!SEALS.length) { grid.innerHTML = '<p class="field-hint" style="padding:.5rem 0">No seals added yet.</p>'; return; }
+    var html = '';
+    SEALS.forEach(function(s, i) {
+      var imgSrc = s.image ? '/static/seals/' + s.image : '';
+      var thumb = imgSrc
+        ? '<a href="' + escH(imgSrc) + '" target="_blank" class="ruler-seal-thumb-link" title="Open full size">'
+          + '<img class="ruler-seal-thumb" src="' + escH(imgSrc) + '" alt="' + escH(s.name) + '" loading="lazy"></a>'
+        : '<div class="ruler-seal-thumb ruler-seal-placeholder">🔏</div>';
+      html += '<div class="ruler-seal-card" data-idx="' + i + '">'
+        + thumb
+        + '<input class="seal-name-input" type="text" value="' + escH(s.name) + '" data-idx="' + i + '" placeholder="Seal name">'
+        + '<div class="ruler-seal-card-actions">'
+        + '<label class="btn-seal-upload" title="Upload image">↑ Image'
+        + '<input type="file" class="seal-file-input" accept="image/*" style="display:none" data-idx="' + i + '"></label>'
+        + (imgSrc ? '<button class="btn-seal-rmimg" data-idx="' + i + '" title="Remove image">✕ img</button>' : '')
+        + '<button class="btn-seal-rm" data-idx="' + i + '" title="Delete this seal">🗑</button>'
+        + '</div></div>';
+    });
+    grid.innerHTML = html;
+    bindEvents();
+  }
+
+  function bindEvents() {
+    var grid = document.getElementById('seals-grid');
+
+    // Rename on blur / Enter
+    grid.querySelectorAll('.seal-name-input').forEach(function(inp) {
+      inp.addEventListener('blur', function() { saveName(inp); });
+      inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } });
+    });
+
+    // Upload image
+    grid.querySelectorAll('.seal-file-input').forEach(function(input) {
+      input.addEventListener('change', function() {
+        if (!input.files.length) return;
+        var idx = parseInt(input.dataset.idx, 10);
+        var fd = new FormData(); fd.append('image', input.files[0]);
+        fetch('/ruler/' + encodeURIComponent(RULER) + '/seal/' + idx + '/upload', { method: 'POST', body: fd })
+          .then(function(r) { return r.json(); })
+          .then(function(d) { if (d.filename) { SEALS[idx].image = d.filename; renderGrid(); } })
+          .catch(function() { alert('Upload failed.'); });
+      });
+    });
+
+    // Remove image only
+    grid.querySelectorAll('.btn-seal-rmimg').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var idx = parseInt(btn.dataset.idx, 10);
+        fetch('/ruler/' + encodeURIComponent(RULER) + '/seal/' + idx + '/delete_image', { method: 'POST' })
+          .then(function(r) { return r.json(); })
+          .then(function() { delete SEALS[idx].image; renderGrid(); });
+      });
+    });
+
+    // Delete entire seal
+    grid.querySelectorAll('.btn-seal-rm').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        if (!confirm('Delete this seal entry?')) return;
+        var idx = parseInt(btn.dataset.idx, 10);
+        fetch('/ruler/' + encodeURIComponent(RULER) + '/seal/' + idx + '/delete', { method: 'POST' })
+          .then(function(r) { return r.json(); })
+          .then(function() { SEALS.splice(idx, 1); renderGrid(); });
+      });
+    });
+  }
+
+  function saveName(inp) {
+    var idx  = parseInt(inp.dataset.idx, 10);
+    var name = inp.value.trim();
+    if (!name) { inp.value = SEALS[idx].name; return; }
+    if (name === SEALS[idx].name) return;
+    var fd = new FormData(); fd.append('name', name);
+    fetch('/ruler/' + encodeURIComponent(RULER) + '/seal/' + idx + '/rename', { method: 'POST', body: fd })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { if (d.ok) SEALS[idx].name = d.name; });
+  }
+
+  // Add new seal
+  document.getElementById('btn-add-seal').addEventListener('click', function() {
+    var inp  = document.getElementById('new-seal-name');
+    var name = inp.value.trim();
+    if (!name) { inp.focus(); return; }
+    var fd = new FormData(); fd.append('name', name);
+    fetch('/ruler/' + encodeURIComponent(RULER) + '/seal/add', { method: 'POST', body: fd })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { if (d.index !== undefined) { SEALS.push({name: d.name}); inp.value = ''; renderGrid(); } });
+  });
+  document.getElementById('new-seal-name').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('btn-add-seal').click(); }
+  });
+
+  renderGrid();
+})();
+</script>
+{% endblock %}

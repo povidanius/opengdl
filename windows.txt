@@ -1,0 +1,9 @@
+  cd C:\Users\YourName\collection
+  2. Production mode command — FLASK_ENV=production python app.py is Linux syntax. On Windows CMD use:
+  set FLASK_ENV=production && python app.py
+  2. Or in PowerShell:
+  $env:FLASK_ENV="production"; python app.py
+  3. Backup command — cp -r data/ uploads/ /path/to/backup/ is Linux. On Windows use File Explorer or:
+  xcopy data backup\data /E /I
+  xcopy uploads backup\uploads /E /I
+

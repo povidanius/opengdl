@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Export Catalogue · {{ meta.collection_name }}{% endblock %}
+
+{% block content %}
+<div class="export-layout">
+
+  <div class="form-header">
+    <nav class="breadcrumb">
+      <a href="{{ url_for('index') }}">Collection</a>
+      <span class="bc-sep">›</span>
+      <span>Export PDF</span>
+    </nav>
+    <h1 class="page-title">Export PDF Catalogue</h1>
+    <p class="page-desc">Select the coins you want to include in the printed catalogue.
+    The PDF will be formatted in publication style with images, descriptions, and catalogue references.</p>
+  </div>
+
+  {% if coins %}
+    <form method="post" action="{{ url_for('export_pdf') }}" id="export-form">
+
+      <!-- Selection controls -->
+      <div class="export-controls">
+        <div class="export-sel-btns">
+          <button type="button" class="btn-secondary btn-sm" onclick="selectAll()">Select All</button>
+          <button type="button" class="btn-secondary btn-sm" onclick="selectNone()">Select None</button>
+          <button type="button" class="btn-secondary btn-sm" onclick="invertSelection()">Invert</button>
+        </div>
+        <div class="export-count">
+          <span id="sel-count">0</span> of {{ coins|length }} selected
+        </div>
+        <button type="submit" class="btn-primary btn-export" id="export-btn" disabled>
+          ⬇ Download PDF
+        </button>
+      </div>
+
+      <!-- Coin checklist -->
+      <div class="export-list">
+        {% for coin in coins %}
+          <label class="export-item" for="coin_{{ coin.id }}">
+            <input type="checkbox" name="coin_ids" value="{{ coin.id }}"
+                   id="coin_{{ coin.id }}" class="export-cb" onchange="updateCount()">
+
+            {% if coin.photos %}
+              <img src="{{ url_for('uploaded_file', filename=coin.photos[0]) }}"
+                   alt="{{ coin.denomination }}" class="export-thumb">
+            {% else %}
+              <div class="export-thumb export-no-img">⚙</div>
+            {% endif %}
+
+            <div class="export-info">
+              <div class="export-ruler">{{ coin.ruler or '—' }}</div>
+              <div class="export-title">{{ coin.denomination or 'Unknown' }}
+                {% if coin.year_display %}<span class="export-year">· {{ coin.year_display }}</span>{% endif %}
+              </div>
+              <div class="export-meta">
+                {% if coin.mint %}<span>{{ coin.mint }}</span>{% endif %}
+                {% if coin.material %}<span class="dsep">·</span><span>{{ coin.material }}</span>{% endif %}
+                {% if coin.condition %}<span class="dsep">·</span><span>{{ coin.condition }}</span>{% endif %}
+                {% if coin.is_sold %}<span class="sold-chip sold-chip-sm">SOLD</span>{% endif %}
+              </div>
+            </div>
+
+            <div class="export-check-mark">✓</div>
+          </label>
+        {% endfor %}
+      </div>
+
+      <!-- Bottom submit -->
+      <div class="export-footer">
+        <button type="submit" class="btn-primary btn-lg btn-export" id="export-btn-bottom" disabled>
+          ⬇ Download PDF Catalogue
+        </button>
+      </div>
+
+    </form>
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">⚜</div>
+      <h2>No coins in collection</h2>
+      <p>Add some coins before exporting a catalogue.</p>
+      <a href="{{ url_for('coin_add') }}" class="btn-primary">Add First Coin</a>
+    </div>
+  {% endif %}
+
+</div>
+
+<script>
+function getCheckboxes() {
+  return document.querySelectorAll('.export-cb');
+}
+function updateCount() {
+  const checked = [...getCheckboxes()].filter(cb => cb.checked).length;
+  document.getElementById('sel-count').textContent = checked;
+  const disabled = checked === 0;
+  document.getElementById('export-btn').disabled = disabled;
+  const bottom = document.getElementById('export-btn-bottom');
+  if (bottom) bottom.disabled = disabled;
+}
+function selectAll()    { getCheckboxes().forEach(cb => cb.checked = true);  updateCount(); }
+function selectNone()   { getCheckboxes().forEach(cb => cb.checked = false); updateCount(); }
+function invertSelection() { getCheckboxes().forEach(cb => cb.checked = !cb.checked); updateCount(); }
+updateCount();
+</script>
+{% endblock %}

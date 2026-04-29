@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Coin · {{ meta.collection_name }}{% endblock %}
+
+{% block content %}
+<div class="form-layout">
+
+  <div class="form-header">
+    <nav class="breadcrumb">
+      <a href="{{ url_for('index') }}">Collection</a>
+      {% if coin %}
+        <span class="bc-sep">›</span>
+        <a href="{{ url_for('coin_detail', coin_id=coin.id) }}">{{ coin.ruler }} {{ coin.denomination }}</a>
+      {% endif %}
+      <span class="bc-sep">›</span>
+      <span>{{ action }} Coin</span>
+    </nav>
+    <h1 class="page-title">{{ action }} Coin</h1>
+  </div>
+
+  <form method="post" class="coin-form" id="coin-form">
+
+    <!-- ── Section: Identity ───────────────────────────────────────────────── -->
+    <fieldset class="form-section">
+      <legend class="form-legend">Identity</legend>
+      <div class="form-grid form-grid-2">
+
+        <div class="form-group">
+          <label for="ruler">Ruler</label>
+          <input type="text" id="ruler" name="ruler"
+                 value="{{ coin.ruler if coin else '' }}"
+                 list="ruler-list" class="form-input" placeholder="e.g. Jogaila">
+          <datalist id="ruler-list">
+            {% for r in opts.rulers %}<option value="{{ r }}">{% endfor %}
+          </datalist>
+        </div>
+
+        <div class="form-group">
+          <label for="denomination">Denomination</label>
+          <input type="text" id="denomination" name="denomination"
+                 value="{{ coin.denomination if coin else '' }}"
+                 list="denom-list" class="form-input" placeholder="e.g. Denar">
+          <datalist id="denom-list">
+            {% for d in opts.denominations %}<option value="{{ d }}">{% endfor %}
+          </datalist>
+        </div>
+
+        <div class="form-group">
+          <label for="mint">Mint</label>
+          <input type="text" id="mint" name="mint"
+                 value="{{ coin.mint if coin else '' }}"
+                 list="mint-list" class="form-input" placeholder="e.g. Vilnius">
+          <datalist id="mint-list">
+            {% for m in opts.mints %}<option value="{{ m }}">{% endfor %}
+          </datalist>
+        </div>
+
+        <div class="form-group">
+          <label for="material">Material</label>
+          <input type="text" id="material" name="material"
+                 value="{{ coin.material if coin else '' }}"
+                 list="material-list" class="form-input" placeholder="e.g. Silver">
+          <datalist id="material-list">
+            {% for m in opts.materials %}<option value="{{ m }}">{% endfor %}
+          </datalist>
+        </div>
+
+      </div>
+    </fieldset>
+
+    <!-- ── Section: Date ──────────────────────────────────────────────────── -->
+    <fieldset class="form-section">
+      <legend class="form-legend">Date &amp; Period</legend>
+      <div class="form-grid form-grid-3">
+
+        <div class="form-group">
+          <label for="year_display">Year / Range <span class="label-hint">(display)</span></label>
+          <input type="text" id="year_display" name="year_display"
+                 value="{{ coin.year_display if coin else '' }}"
+                 class="form-input" placeholder="e.g. 1392–1430">
+        </div>
+
+        <div class="form-group">
+          <label for="year_from">Year from <span class="label-hint">(for sorting)</span></label>
+          <input type="number" id="year_from" name="year_from"
+                 value="{{ coin.year_from if coin and coin.year_from else '' }}"
+                 class="form-input" placeholder="1392" min="1200" max="1700">
+        </div>
+
+        <div class="form-group">
+          <label for="year_to">Year to</label>
+          <input type="number" id="year_to" name="year_to"
+                 value="{{ coin.year_to if coin and coin.year_to else '' }}"
+                 class="form-input" placeholder="1430" min="1200" max="1700">
+        </div>
+
+      </div>
+    </fieldset>
+
+    <!-- ── Section: Physical ─────────────────────────────────────────────── -->
+    <fieldset class="form-section">
+      <legend class="form-legend">Physical Characteristics</legend>
+      <div class="form-grid form-grid-3">
+
+        <div class="form-group">
+          <label for="weight">Weight (g)</label>
+          <input type="number" id="weight" name="weight" step="0.01" min="0"
+                 value="{{ coin.weight if coin and coin.weight else '' }}"
+                 class="form-input" placeholder="0.85">
+        </div>
+
+        <div class="form-group">
+          <label for="diameter">Diameter (mm)</label>
+          <input type="number" id="diameter" name="diameter" step="0.1" min="0"
+                 value="{{ coin.diameter if coin and coin.diameter else '' }}"
+                 class="form-input" placeholder="14.5">
+        </div>
+
+        <div class="form-group">
+          <label for="condition">Condition / Grade</label>
+          <input type="text" id="condition" name="condition"
+                 value="{{ coin.condition if coin else '' }}"
+                 list="cond-list" class="form-input" placeholder="e.g. Very Fine (VF-30)">
+          <datalist id="cond-list">
+            {% for c in opts.conditions %}<option value="{{ c }}">{% endfor %}
+          </datalist>
+        </div>
+
+      </div>
+    </fieldset>
+
+    <!-- ── Section: Descriptions ─────────────────────────────────────────── -->
+    <fieldset class="form-section">
+      <legend class="form-legend">Descriptions</legend>
+
+      <div class="form-group">
+        <label for="obverse">Obverse</label>
+        <textarea id="obverse" name="obverse" rows="3" class="form-textarea"
+                  placeholder="Describe the obverse (heads side) in detail…">{{ coin.obverse if coin else '' }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="reverse">Reverse</label>
+        <textarea id="reverse" name="reverse" rows="3" class="form-textarea"
+                  placeholder="Describe the reverse (tails side) in detail…">{{ coin.reverse if coin else '' }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="edge">Edge <span class="label-hint">(optional)</span></label>
+        <input type="text" id="edge" name="edge"
+               value="{{ coin.edge if coin else '' }}"
+               class="form-input" placeholder="e.g. Plain, reeded, lettered…">
+      </div>
+
+    </fieldset>
+
+    <!-- ── Section: Catalogue references ─────────────────────────────────── -->
+    <fieldset class="form-section">
+      <legend class="form-legend">Catalogue References</legend>
+      <div class="form-grid form-grid-2">
+
+        {% set cat_fields = [
+          ('ivanauskas', 'Ivanauskas'),
+          ('bagdonas', 'Bagdonas'),
+          ('huletski', 'Huletski / Huletski-Karpaw'),
+          ('sarankinas', 'Sarankinas'),
+          ('custom', 'Other reference'),
+        ] %}
+        {% for key, label in cat_fields %}
+          <div class="form-group">
+            <label for="cat_{{ key }}">{{ label }}</label>
+            <input type="text" id="cat_{{ key }}" name="cat_{{ key }}"
+                   value="{{ coin.catalogue_refs.get(key, '') if coin and coin.catalogue_refs else '' }}"
+                   class="form-input" placeholder="Catalogue number…">
+          </div>
+        {% endfor %}
+
+      </div>
+    </fieldset>
+
+    <!-- ── Section: Acquisition ──────────────────────────────────────────── -->
+    <fieldset class="form-section">
+      <legend class="form-legend">Acquisition &amp; Sale</legend>
+      <div class="form-grid form-grid-2">
+
+        <div class="form-group">
+          <label for="purchase_price">Purchase Price (€)</label>
+          <input type="number" id="purchase_price" name="purchase_price" step="0.01" min="0"
+                 value="{{ coin.purchase_price if coin and coin.purchase_price else '' }}"
+                 class="form-input" placeholder="0.00">
+        </div>
+
+        <div class="form-group">
+          <label for="purchase_date">Purchase Date</label>
+          <input type="date" id="purchase_date" name="purchase_date"
+                 value="{{ coin.purchase_date if coin else '' }}"
+                 class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label for="purchase_source">Source / Auction House</label>
+          <input type="text" id="purchase_source" name="purchase_source"
+                 value="{{ coin.purchase_source if coin else '' }}"
+                 class="form-input" placeholder="e.g. Numisbalt, eBay, private…">
+        </div>
+
+        <div class="form-group form-checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" name="is_sold" value="1"
+                   {% if coin and coin.is_sold %}checked{% endif %}
+                   id="is_sold_cb" onchange="toggleSaleFields()">
+            <span>Sold</span>
+          </label>
+        </div>
+
+        <div id="sale-fields" style="{{ '' if (coin and coin.is_sold) else 'display:none' }}">
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label for="sale_price">Sale Price (€)</label>
+              <input type="number" id="sale_price" name="sale_price" step="0.01" min="0"
+                     value="{{ coin.sale_price if coin and coin.sale_price else '' }}"
+                     class="form-input" placeholder="0.00">
+            </div>
+            <div class="form-group">
+              <label for="sale_date">Sale Date</label>
+              <input type="date" id="sale_date" name="sale_date"
+                     value="{{ coin.sale_date if coin else '' }}"
+                     class="form-input">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </fieldset>
+
+    <!-- ── Section: Provenance & notes ───────────────────────────────────── -->
+    <fieldset class="form-section">
+      <legend class="form-legend">Provenance &amp; Notes</legend>
+
+      <div class="form-group">
+        <label for="provenance">Provenance</label>
+        <textarea id="provenance" name="provenance" rows="2" class="form-textarea"
+                  placeholder="Collection history, previous owners…">{{ coin.provenance if coin else '' }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Notes</label>
+        <textarea id="notes" name="notes" rows="3" class="form-textarea"
+                  placeholder="Any additional observations, references, or remarks…">{{ coin.notes if coin else '' }}</textarea>
+      </div>
+
+    </fieldset>
+
+    <!-- ── Section: Tags ──────────────────────────────────────────────────── -->
+    <fieldset class="form-section">
+      <legend class="form-legend">Tags &amp; Categories</legend>
+      <div class="form-group">
+        <label for="tags">Tags <span class="label-hint">(comma-separated)</span></label>
+        <input type="text" id="tags" name="tags"
+               value="{{ coin.tags|join(', ') if coin and coin.tags else '' }}"
+               class="form-input" placeholder="e.g. denar, jogaila, rare, holed">
+        <span class="field-hint">Separate multiple tags with commas</span>
+      </div>
+    </fieldset>
+
+    <!-- ── Form buttons ───────────────────────────────────────────────────── -->
+    <div class="form-actions">
+      <button type="submit" class="btn-primary btn-lg">
+        {{ '💾 Save Changes' if action == 'Edit' else '+ Add to Collection' }}
+      </button>
+      {% if coin %}
+        <a href="{{ url_for('coin_detail', coin_id=coin.id) }}" class="btn-secondary btn-lg">Cancel</a>
+      {% else %}
+        <a href="{{ url_for('index') }}" class="btn-secondary btn-lg">Cancel</a>
+      {% endif %}
+    </div>
+
+  </form>
+</div>
+
+<script>
+function toggleSaleFields() {
+  const cb = document.getElementById('is_sold_cb');
+  const fields = document.getElementById('sale-fields');
+  fields.style.display = cb.checked ? '' : 'none';
+}
+</script>
+{% endblock %}

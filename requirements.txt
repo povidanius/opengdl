@@ -1,0 +1,3 @@
+Flask>=2.0,<4.0
+Pillow>=8.0
+reportlab>=3.6,<4.0

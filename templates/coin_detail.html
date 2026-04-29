@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+{% block title %}{{ coin.ruler }} · {{ coin.denomination }} · {{ meta.collection_name }}{% endblock %}
+
+{% block content %}
+<div class="detail-layout">
+
+  <!-- ── Left column: images ───────────────────────────────────────────────── -->
+  <aside class="detail-images">
+
+    <!-- Main image viewer -->
+    <div class="image-viewer">
+      {% if coin.photos %}
+        {% set first_photo = coin.photo_obverse if coin.photo_obverse else coin.photos[0] %}
+        <img id="main-photo"
+             src="{{ url_for('uploaded_file', filename=first_photo) }}"
+             alt="{{ coin.ruler }} {{ coin.denomination }}"
+             class="main-photo">
+      {% else %}
+        <div class="no-photo-placeholder">
+          <span class="no-image-icon-lg">⚙</span>
+          <p>No photos yet</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Thumbnails -->
+    {% if coin.photos | length > 1 %}
+      <div class="thumb-strip">
+        {% set active_photo = coin.photo_obverse if coin.photo_obverse else coin.photos[0] %}
+        {% for photo in coin.photos %}
+          <div class="thumb-wrap">
+            <img src="{{ url_for('uploaded_file', filename=photo) }}"
+                 alt="Photo {{ loop.index }}"
+                 class="thumb {% if photo == active_photo %}thumb-active{% endif %}"
+                 onclick="switchPhoto(this, '{{ url_for('uploaded_file', filename=photo) }}')">
+            {% if coin.photo_obverse == photo %}
+              <span class="thumb-role-badge obv-badge">OBV</span>
+            {% elif coin.photo_reverse == photo %}
+              <span class="thumb-role-badge rev-badge">REV</span>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Upload photos -->
+    <details class="upload-panel">
+      <summary>Upload Photos</summary>
+      <form method="post" action="{{ url_for('upload_photo', coin_id=coin.id) }}"
+            enctype="multipart/form-data" class="upload-form">
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" name="photos" id="photo-input"
+                 multiple accept="image/*" class="file-input">
+          <label for="photo-input" class="drop-label">
+            <span class="drop-icon">📷</span>
+            <span>Click or drag images here</span>
+            <span class="drop-hint">JPG, PNG, WEBP, TIF up to 32 MB each</span>
+          </label>
+        </div>
+        <button type="submit" class="btn-primary btn-full">Upload</button>
+      </form>
+    </details>
+
+    <!-- Manage photos -->
+    {% if coin.photos %}
+      <details class="upload-panel">
+        <summary>Manage Photos ({{ coin.photos|length }})</summary>
+        <div class="photo-manage-list">
+          {% for photo in coin.photos %}
+            <div class="photo-manage-item">
+              <div class="thumb-manage-wrap">
+                <img src="{{ url_for('uploaded_file', filename=photo) }}"
+                     alt="{{ photo }}" class="thumb-manage">
+                {% if coin.photo_obverse == photo %}
+                  <span class="thumb-role-badge obv-badge">OBV</span>
+                {% elif coin.photo_reverse == photo %}
+                  <span class="thumb-role-badge rev-badge">REV</span>
+                {% endif %}
+              </div>
+              <div class="photo-manage-actions">
+                <form method="post" action="{{ url_for('set_photo_role', coin_id=coin.id) }}" style="display:inline">
+                  <input type="hidden" name="filename" value="{{ photo }}">
+                  <input type="hidden" name="role" value="obverse">
+                  <button type="submit" class="btn-xs {% if coin.photo_obverse == photo %}btn-role-active{% else %}btn-secondary{% endif %}"
+                          title="{% if coin.photo_obverse == photo %}Clear obverse{% else %}Set as obverse{% endif %}">OBV</button>
+                </form>
+                <form method="post" action="{{ url_for('set_photo_role', coin_id=coin.id) }}" style="display:inline">
+                  <input type="hidden" name="filename" value="{{ photo }}">
+                  <input type="hidden" name="role" value="reverse">
+                  <button type="submit" class="btn-xs {% if coin.photo_reverse == photo %}btn-role-active{% else %}btn-secondary{% endif %}"
+                          title="{% if coin.photo_reverse == photo %}Clear reverse{% else %}Set as reverse{% endif %}">REV</button>
+                </form>
+                <form method="post"
+                      action="{{ url_for('delete_photo', coin_id=coin.id, filename=photo) }}"
+                      onsubmit="return confirm('Delete this photo?')" style="display:inline">
+                  <button type="submit" class="btn-danger btn-xs">Del</button>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </details>
+    {% endif %}
+
+  </aside>
+
+  <!-- ── Right column: details ─────────────────────────────────────────────── -->
+  <div class="detail-main">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="{{ url_for('index') }}">Collection</a>
+      <span class="bc-sep">›</span>
+      <span>{{ coin.ruler }}</span>
+      <span class="bc-sep">›</span>
+      <span>{{ coin.denomination }}</span>
+    </nav>
+
+    <!-- Title block -->
+    <div class="detail-header">
+      <div class="detail-ruler">{{ coin.ruler or '—' }}</div>
+      <h1 class="detail-title">{{ coin.denomination or 'Unknown denomination' }}</h1>
+      <div class="detail-subtitle">
+        {% if coin.year_display %}<span>{{ coin.year_display }}</span>{% endif %}
+        {% if coin.mint %}<span class="dsep">·</span><span>{{ coin.mint }}</span>{% endif %}
+        {% if coin.material %}<span class="dsep">·</span><span>{{ coin.material }}</span>{% endif %}
+        {% if coin.is_sold %}<span class="sold-chip">SOLD</span>{% endif %}
+      </div>
+    </div>
+
+    <!-- Spec pills -->
+    <div class="spec-pills">
+      {% if coin.weight %}
+        <div class="spec-pill">
+          <span class="pill-label">Weight</span>
+          <span class="pill-value">{{ coin.weight }} g</span>
+        </div>
+      {% endif %}
+      {% if coin.diameter %}
+        <div class="spec-pill">
+          <span class="pill-label">Diameter</span>
+          <span class="pill-value">{{ coin.diameter }} mm</span>
+        </div>
+      {% endif %}
+      {% if coin.condition %}
+        <div class="spec-pill spec-pill-grade">
+          <span class="pill-label">Grade</span>
+          <span class="pill-value">{{ coin.condition }}</span>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Descriptions -->
+    {% if coin.obverse %}
+      <section class="detail-section">
+        <h3 class="section-heading">Obverse</h3>
+        <p class="section-text">{{ coin.obverse }}</p>
+      </section>
+    {% endif %}
+
+    {% if coin.reverse %}
+      <section class="detail-section">
+        <h3 class="section-heading">Reverse</h3>
+        <p class="section-text">{{ coin.reverse }}</p>
+      </section>
+    {% endif %}
+
+    {% if coin.edge %}
+      <section class="detail-section">
+        <h3 class="section-heading">Edge</h3>
+        <p class="section-text">{{ coin.edge }}</p>
+      </section>
+    {% endif %}
+
+    <!-- Catalogue references -->
+    {% if coin.catalogue_refs %}
+      <section class="detail-section">
+        <h3 class="section-heading">Catalogue References</h3>
+        <table class="ref-table">
+          {% set ref_labels = {
+            'ivanauskas': 'Ivanauskas',
+            'bagdonas': 'Bagdonas',
+            'huletski': 'Huletski',
+            'sarankinas': 'Sarankinas',
+            'custom': 'Other',
+          } %}
+          {% for key, val in coin.catalogue_refs.items() %}
+            {% if val %}
+              <tr>
+                <td class="ref-key">{{ ref_labels.get(key, key) }}</td>
+                <td class="ref-val">{{ val }}</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </table>
+      </section>
+    {% endif %}
+
+    <!-- Financial -->
+    {% if meta.show_prices %}
+    <section class="detail-section">
+      <h3 class="section-heading">Acquisition</h3>
+      <div class="fin-grid">
+        {% if coin.purchase_price %}
+          <div class="fin-item">
+            <span class="fin-label">Purchase price</span>
+            <span class="fin-value">€ {{ "%.2f"|format(coin.purchase_price) }}</span>
+          </div>
+        {% endif %}
+        {% if coin.purchase_date %}
+          <div class="fin-item">
+            <span class="fin-label">Purchase date</span>
+            <span class="fin-value">{{ coin.purchase_date }}</span>
+          </div>
+        {% endif %}
+        {% if coin.purchase_source %}
+          <div class="fin-item">
+            <span class="fin-label">Source</span>
+            <span class="fin-value">{{ coin.purchase_source }}</span>
+          </div>
+        {% endif %}
+        {% if coin.is_sold %}
+          {% if coin.sale_price %}
+            <div class="fin-item fin-item-sold">
+              <span class="fin-label">Sale price</span>
+              <span class="fin-value">€ {{ "%.2f"|format(coin.sale_price) }}</span>
+            </div>
+          {% endif %}
+          {% if coin.sale_date %}
+            <div class="fin-item fin-item-sold">
+              <span class="fin-label">Sale date</span>
+              <span class="fin-value">{{ coin.sale_date }}</span>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- Provenance & notes -->
+    {% if coin.provenance %}
+      <section class="detail-section">
+        <h3 class="section-heading">Provenance</h3>
+        <p class="section-text section-italic">{{ coin.provenance }}</p>
+      </section>
+    {% endif %}
+
+    {% if coin.notes %}
+      <section class="detail-section">
+        <h3 class="section-heading">Notes</h3>
+        <p class="section-text">{{ coin.notes }}</p>
+      </section>
+    {% endif %}
+
+    <!-- Documents -->
+    <section class="detail-section">
+      <h3 class="section-heading">Documents</h3>
+      {% if coin.documents %}
+        <ul class="doc-list">
+          {% for doc in coin.documents %}
+            {% set doc_ext = doc.original_name.rsplit('.', 1)[1].lower() if '.' in doc.original_name else '' %}
+            {% set is_image = doc_ext in ['jpg', 'jpeg', 'png', 'gif', 'webp', 'tif', 'tiff'] %}
+            {% set is_pdf = doc_ext == 'pdf' %}
+            {% set doc_url = url_for('download_document', coin_id=coin.id, filename=doc.filename) %}
+            <li class="doc-item {% if is_image %}doc-item-image{% endif %}">
+              {% if is_image %}
+                <a href="{{ doc_url }}" target="_blank" class="doc-thumb-link">
+                  <img src="{{ doc_url }}" class="doc-thumb" alt="{{ doc.original_name }}">
+                </a>
+              {% elif is_pdf %}
+                <span class="doc-icon">📄</span>
+              {% else %}
+                <span class="doc-icon">📎</span>
+              {% endif %}
+              <a href="{{ doc_url }}"
+                 class="doc-name"
+                 {% if is_image or is_pdf %}target="_blank"{% else %}download{% endif %}>{{ doc.original_name }}</a>
+              <form method="post"
+                    action="{{ url_for('delete_document', coin_id=coin.id, filename=doc.filename) }}"
+                    onsubmit="return confirm('Delete {{ doc.original_name }}?')"
+                    style="display:inline">
+                <button type="submit" class="btn-danger btn-xs">Del</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="section-text no-docs">No documents attached.</p>
+      {% endif %}
+      <details class="upload-panel" style="margin-top:.75rem">
+        <summary>Upload Documents</summary>
+        <form method="post" action="{{ url_for('upload_document', coin_id=coin.id) }}"
+              enctype="multipart/form-data" class="upload-form">
+          <div class="drop-zone">
+            <input type="file" name="documents" id="doc-input" multiple
+                   accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.tif,.tiff,.zip,.rar,.7z,.doc,.docx,.xls,.xlsx,.txt,.csv"
+                   class="file-input">
+            <label for="doc-input" class="drop-label">
+              <span class="drop-icon">📂</span>
+              <span>Click to select files</span>
+              <span class="drop-hint">PDF, images (JPG/PNG/WEBP/TIF), ZIP, DOC, XLS, TXT, CSV — up to 64 MB each</span>
+            </label>
+          </div>
+          <button type="submit" class="btn-primary btn-full">Upload</button>
+        </form>
+      </details>
+    </section>
+
+    <!-- Tags -->
+    {% if coin.tags %}
+      <div class="detail-tags">
+        {% for tag in coin.tags %}
+          <a href="{{ url_for('index', tag=tag) }}" class="tag tag-lg">{{ tag }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Record metadata -->
+    <div class="record-meta">
+      <span>Added: {{ coin.created_at[:10] }}</span>
+      <span class="dsep">·</span>
+      <span>Updated: {{ coin.updated_at[:10] }}</span>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="detail-actions">
+      <a href="{{ url_for('coin_edit', coin_id=coin.id) }}" class="btn-primary">Edit Coin</a>
+      <a href="{{ url_for('export_page') }}" class="btn-secondary">Export PDF</a>
+      <form method="post" action="{{ url_for('coin_delete', coin_id=coin.id) }}"
+            onsubmit="return confirm('Permanently delete this coin and all its photos?')"
+            style="display:inline">
+        <button type="submit" class="btn-danger">Delete</button>
+      </form>
+    </div>
+
+  </div><!-- /.detail-main -->
+</div><!-- /.detail-layout -->
+
+<script>
+function switchPhoto(thumb, src) {
+  document.getElementById('main-photo').src = src;
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('thumb-active'));
+  thumb.classList.add('thumb-active');
+}
+</script>
+{% endblock %}

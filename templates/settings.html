@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Settings · {{ meta.collection_name }}{% endblock %}
+
+{% block content %}
+<div class="form-layout form-layout-narrow">
+
+  <div class="form-header">
+    <nav class="breadcrumb">
+      <a href="{{ url_for('index') }}">Collection</a>
+      <span class="bc-sep">›</span>
+      <span>Settings</span>
+    </nav>
+    <h1 class="page-title">Collection Settings</h1>
+  </div>
+
+  <form method="post" class="coin-form">
+    <fieldset class="form-section">
+      <legend class="form-legend">Privacy</legend>
+
+      <div class="form-group form-group-check">
+        <label class="check-label">
+          <input type="checkbox" name="show_prices" id="show_prices"
+                 {% if meta.show_prices %}checked{% endif %}>
+          Show purchase &amp; sale prices
+        </label>
+        <p class="form-hint">When unchecked, all price information is hidden in the catalogue and excluded from exported PDFs.</p>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend class="form-legend">Display</legend>
+
+      <div class="form-group">
+        <label for="per_page">Coins per page</label>
+        <input type="number" id="per_page" name="per_page"
+               value="{{ meta.per_page | default(100) }}"
+               min="10" max="500" class="form-input" style="max-width:120px">
+        <span class="field-hint">Number of coins shown per page on the collection view (10–500, default 100).</span>
+      </div>
+    </fieldset>
+
+    <fieldset class="form-section">
+      <legend class="form-legend">Collection Identity</legend>
+
+      <div class="form-group">
+        <label for="collection_name">Collection Name</label>
+        <input type="text" id="collection_name" name="collection_name"
+               value="{{ meta.collection_name }}" class="form-input"
+               placeholder="e.g. Grand Duchy of Lithuania Numismatic Collection">
+      </div>
+
+      <div class="form-group">
+        <label for="owner">Collector Name</label>
+        <input type="text" id="owner" name="owner"
+               value="{{ meta.owner }}" class="form-input"
+               placeholder="Your name (appears in PDF footer)">
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary btn-lg">Save Settings</button>
+      <a href="{{ url_for('index') }}" class="btn-secondary btn-lg">Cancel</a>
+    </div>
+  </form>
+
+  <!-- JSON API info -->
+  <div class="info-box">
+    <h3 class="info-title">JSON API</h3>
+    <p>The collection data is also accessible as JSON:</p>
+    <ul class="info-list">
+      <li><a href="{{ url_for('api_coins') }}" target="_blank"><code>GET /api/coins</code></a> — all coins</li>
+      <li><code>GET /api/coin/&lt;id&gt;</code> — single coin</li>
+    </ul>
+    <p>Raw data file: <code>data/collection.json</code></p>
+  </div>
+
+</div>
+{% endblock %}

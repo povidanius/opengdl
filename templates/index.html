@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+{% block title %}Collection · {{ meta.collection_name }}{% endblock %}
+
+{% block content %}
+
+<!-- ── Stats bar ─────────────────────────────────────────────────────────── -->
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-value">{{ total_count }}</span>
+    <span class="stat-label">Total coins</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value">{{ filtered_count }}</span>
+    <span class="stat-label">Shown</span>
+  </div>
+  {% if meta.show_prices %}
+  <div class="stat">
+    <span class="stat-value">€ {{ "%.2f"|format(total_value) }}</span>
+    <span class="stat-label">Invested</span>
+  </div>
+  {% endif %}
+</div>
+
+<!-- ── Ruler exposition ──────────────────────────────────────────────────── -->
+<section class="rulers-exposition">
+  <div class="rulers-expo-header">
+    <h2 class="rulers-expo-title">Rulers of the Grand Duchy of Lithuania</h2>
+  </div>
+  <div class="rulers-strip" id="rulers-strip">
+    {% for ruler_name, rdata in ruler_data.items() %}
+    {% set coin_count = ruler_counts.get(ruler_name, 0) %}
+    <div class="ruler-card {% if selected_ruler == ruler_name %}ruler-card-active{% endif %}"
+         style="flex:0 0 180px;padding:.975rem .75rem .75rem;"
+         data-ruler="{{ ruler_name }}"
+         data-bio="{{ rdata.bio }}"
+         data-born="{{ rdata.born }}"
+         data-died="{{ rdata.died }}"
+         data-reign="{{ rdata.reign }}"
+         data-notes="{{ rdata.custom_notes }}">
+
+      <a href="{{ url_for('index', ruler=ruler_name, sort='ruler', dir='asc') }}"
+         class="ruler-portrait-link" title="Show {{ ruler_name }} coins">
+        <div class="ruler-portrait-wrap" style="width:108px;height:108px;">
+          {% set portrait_path = 'portraits/' + rdata.portrait %}
+          <img src="{{ url_for('static', filename=portrait_path) }}"
+               alt="{{ ruler_name }}"
+               class="ruler-portrait"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="ruler-portrait-fallback" style="display:none">
+            {{ ruler_name[0] }}
+          </div>
+          {% if coin_count > 0 %}
+            <span class="ruler-coin-badge">{{ coin_count }}</span>
+          {% endif %}
+          {% if selected_ruler == ruler_name %}
+            <span class="ruler-active-indicator">✓</span>
+          {% endif %}
+        </div>
+      </a>
+
+      <div class="ruler-card-body">
+        <div class="ruler-card-name" style="font-size:1.08rem;">{{ ruler_name }}</div>
+        <div class="ruler-card-reign" style="font-size:.99rem;">{{ rdata.reign }}</div>
+        <div class="ruler-card-dates" style="font-size:.93rem;">{{ rdata.born }} – {{ rdata.died }}</div>
+      </div>
+
+      <div class="ruler-card-actions">
+        <a href="{{ url_for('index', ruler=ruler_name, sort='ruler', dir='asc') }}"
+           class="btn-xs btn-view ruler-btn-coins"
+           title="{{ coin_count }} coin{% if coin_count != 1 %}s{% endif %} in collection">
+          {{ coin_count }} coin{% if coin_count != 1 %}s{% endif %}
+        </a>
+        <a href="{{ url_for('ruler_edit', ruler_name=ruler_name) }}"
+           class="btn-xs btn-edit" title="Edit notes for {{ ruler_name }}">Edit</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <!-- Bio tooltip panel -->
+  <div class="ruler-bio-panel" id="ruler-bio-panel" style="display:none">
+    <div class="ruler-bio-inner">
+      <span class="ruler-bio-close" onclick="document.getElementById('ruler-bio-panel').style.display='none'">×</span>
+      <div class="ruler-bio-name" id="rp-name"></div>
+      <div class="ruler-bio-dates" id="rp-dates"></div>
+      <p class="ruler-bio-text" id="rp-bio"></p>
+      <p class="ruler-bio-notes" id="rp-notes"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Search & filter bar ──────────────────────────────────────────────── -->
+<section class="filter-section">
+  <form method="get" action="{{ url_for('index') }}" id="filter-form" class="filter-form">
+
+    <div class="search-row">
+      <div class="search-wrap">
+        <input type="search" name="q" value="{{ query }}"
+               placeholder="Search rulers, denominations, descriptions…"
+               class="input-search" autocomplete="off">
+        <button type="submit" class="btn-search">Search</button>
+      </div>
+      {% if query or selected_ruler or selected_denom or selected_material or selected_tag or selected_sold %}
+        <a href="{{ url_for('index') }}" class="btn-clear">Clear filters</a>
+      {% endif %}
+    </div>
+
+    <div class="filter-row">
+      <select name="ruler" class="filter-select" onchange="this.form.submit()">
+        <option value="">All rulers</option>
+        {% for r in filters.rulers %}
+          <option value="{{ r }}" {% if r == selected_ruler %}selected{% endif %}>{{ r }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="denomination" class="filter-select" onchange="this.form.submit()">
+        <option value="">All denominations</option>
+        {% for d in filters.denominations %}
+          <option value="{{ d }}" {% if d == selected_denom %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="material" class="filter-select" onchange="this.form.submit()">
+        <option value="">All materials</option>
+        {% for m in filters.materials %}
+          <option value="{{ m }}" {% if m == selected_material %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="tag" class="filter-select" onchange="this.form.submit()">
+        <option value="">All tags</option>
+        {% for t in filters.tags %}
+          <option value="{{ t }}" {% if t == selected_tag %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="sold" class="filter-select" onchange="this.form.submit()">
+        <option value="">All status</option>
+        <option value="no"  {% if selected_sold == 'no' %}selected{% endif %}>In collection</option>
+        <option value="yes" {% if selected_sold == 'yes' %}selected{% endif %}>Sold</option>
+      </select>
+    </div>
+
+  </form>
+
+  <div class="sort-row">
+    <label class="sort-label">Sort by:</label>
+    {% set sort_fields = [
+      ('ruler',          'Ruler / Period'),
+      ('updated_at',     'Last modified'),
+      ('created_at',     'Date added'),
+      ('denomination',   'Denomination'),
+      ('year',           'Year'),
+      ('weight',         'Weight'),
+      ('purchase_price', 'Price'),
+      ('condition',      'Condition'),
+    ] %}
+    {% for field, label in sort_fields %}
+      <a href="{{ url_for('index', q=query, ruler=selected_ruler, denomination=selected_denom,
+                          material=selected_material, tag=selected_tag, sold=selected_sold,
+                          sort=field, dir='desc' if (sort_by == field and sort_dir == 'asc') else 'asc') }}"
+         class="sort-btn {% if sort_by == field %}sort-active{% endif %}">
+        {{ label }}
+        {% if sort_by == field %}
+          {{ '↑' if sort_dir == 'asc' else '↓' }}
+        {% endif %}
+      </a>
+    {% endfor %}
+  </div>
+
+</section>
+
+<!-- ── Coin grid ─────────────────────────────────────────────────────────── -->
+{% if coins %}
+  <div class="coin-grid">
+    {% for coin in coins %}
+      <article class="coin-card {% if coin.is_sold %}coin-sold{% endif %}">
+
+        <!-- Primary image -->
+        <a href="{{ url_for('coin_detail', coin_id=coin.id) }}" class="card-image-link">
+          {% if coin.photos %}
+            {% set card_photo = coin.photo_obverse if coin.photo_obverse else coin.photos[0] %}
+            <img src="{{ url_for('uploaded_file', filename=card_photo) }}"
+                 alt="{{ coin.ruler }} {{ coin.denomination }}"
+                 class="card-image" loading="lazy">
+          {% else %}
+            <div class="card-no-image">
+              <span class="no-image-icon">⚙</span>
+              <span>No image</span>
+            </div>
+          {% endif %}
+          {% if coin.is_sold %}
+            <span class="sold-badge">SOLD</span>
+          {% endif %}
+        </a>
+
+        <div class="card-body">
+          <div class="card-ruler">{{ coin.ruler or '—' }}</div>
+          <h2 class="card-title">
+            <a href="{{ url_for('coin_detail', coin_id=coin.id) }}">
+              {{ coin.denomination or 'Unknown denomination' }}
+            </a>
+          </h2>
+
+          <div class="card-meta">
+            {% if coin.year_display %}<span class="meta-item">{{ coin.year_display }}</span>{% endif %}
+            {% if coin.mint %}<span class="meta-item">{{ coin.mint }}</span>{% endif %}
+            {% if coin.material %}<span class="meta-item meta-material">{{ coin.material }}</span>{% endif %}
+          </div>
+
+          <div class="card-specs">
+            {% if coin.weight %}<span class="spec">{{ coin.weight }} g</span>{% endif %}
+            {% if coin.diameter %}<span class="spec">∅ {{ coin.diameter }} mm</span>{% endif %}
+            {% if coin.condition %}<span class="spec spec-grade">{{ coin.condition }}</span>{% endif %}
+          </div>
+
+          {% if meta.show_prices and coin.purchase_price %}
+            <div class="card-price">€ {{ "%.2f"|format(coin.purchase_price) }}</div>
+          {% endif %}
+
+          {% if coin.tags %}
+            <div class="card-tags">
+              {% for tag in coin.tags[:4] %}
+                <a href="{{ url_for('index', tag=tag) }}" class="tag">{{ tag }}</a>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="card-actions">
+          <a href="{{ url_for('coin_detail', coin_id=coin.id) }}" class="btn-sm btn-view">View</a>
+          <a href="{{ url_for('coin_edit', coin_id=coin.id) }}" class="btn-sm btn-edit">Edit</a>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+
+  <!-- ── Pagination ──────────────────────────────────────────────────────── -->
+  {% if total_pages > 1 %}
+  <nav class="pagination" aria-label="Page navigation">
+    {% if page > 1 %}
+      <a href="{{ url_for('index', q=query, ruler=selected_ruler, denomination=selected_denom,
+                          material=selected_material, tag=selected_tag, sold=selected_sold,
+                          sort=sort_by, dir=sort_dir, page=page-1) }}"
+         class="page-btn page-prev">‹ Prev</a>
+    {% else %}
+      <span class="page-btn page-prev page-disabled">‹ Prev</span>
+    {% endif %}
+
+    {% set start_p = [1, page - 2]|max %}
+    {% set end_p   = [total_pages, page + 2]|min %}
+
+    {% if start_p > 1 %}
+      <a href="{{ url_for('index', q=query, ruler=selected_ruler, denomination=selected_denom,
+                          material=selected_material, tag=selected_tag, sold=selected_sold,
+                          sort=sort_by, dir=sort_dir, page=1) }}" class="page-btn">1</a>
+      {% if start_p > 2 %}<span class="page-ellipsis">…</span>{% endif %}
+    {% endif %}
+
+    {% for p in range(start_p, end_p + 1) %}
+      {% if p == page %}
+        <span class="page-btn page-current">{{ p }}</span>
+      {% else %}
+        <a href="{{ url_for('index', q=query, ruler=selected_ruler, denomination=selected_denom,
+                            material=selected_material, tag=selected_tag, sold=selected_sold,
+                            sort=sort_by, dir=sort_dir, page=p) }}" class="page-btn">{{ p }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if end_p < total_pages %}
+      {% if end_p < total_pages - 1 %}<span class="page-ellipsis">…</span>{% endif %}
+      <a href="{{ url_for('index', q=query, ruler=selected_ruler, denomination=selected_denom,
+                          material=selected_material, tag=selected_tag, sold=selected_sold,
+                          sort=sort_by, dir=sort_dir, page=total_pages) }}" class="page-btn">{{ total_pages }}</a>
+    {% endif %}
+
+    {% if page < total_pages %}
+      <a href="{{ url_for('index', q=query, ruler=selected_ruler, denomination=selected_denom,
+                          material=selected_material, tag=selected_tag, sold=selected_sold,
+                          sort=sort_by, dir=sort_dir, page=page+1) }}"
+         class="page-btn page-next">Next ›</a>
+    {% else %}
+      <span class="page-btn page-next page-disabled">Next ›</span>
+    {% endif %}
+
+    <span class="page-info">
+      Page {{ page }} of {{ total_pages }}
+      · showing {{ coins|length }} of {{ filtered_count }}
+    </span>
+  </nav>
+  {% endif %}
+
+{% else %}
+  <div class="empty-state">
+    <div class="empty-icon">⚜</div>
+    <h2>No coins found</h2>
+    {% if query or selected_ruler or selected_denom %}
+      <p>Try adjusting your search or filters.</p>
+      <a href="{{ url_for('index') }}" class="btn-primary">Clear filters</a>
+    {% else %}
+      <p>Your collection is empty. Add your first coin to begin.</p>
+      <a href="{{ url_for('coin_add') }}" class="btn-primary">Add First Coin</a>
+    {% endif %}
+  </div>
+{% endif %}
+
+<script>
+window.RULER_SEALS = {{ ruler_seals | tojson }};
+</script>
+
+{% endblock %}
