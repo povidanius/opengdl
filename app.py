@@ -33,6 +33,8 @@ DOCUMENTS_FOLDER = Path(__file__).parent / "uploads" / "documents"
 DOCUMENTS_FOLDER.mkdir(parents=True, exist_ok=True)
 SEALS_FOLDER = Path(__file__).parent / "static" / "seals"
 SEALS_FOLDER.mkdir(parents=True, exist_ok=True)
+COATS_FOLDER = Path(__file__).parent / "static" / "coats_of_arms"
+COATS_FOLDER.mkdir(parents=True, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "webp", "tif", "tiff"}
 ALLOWED_DOC_EXTENSIONS = {
@@ -895,6 +897,7 @@ def ruler_edit(ruler_name):
         ruler=static_data,
         current_notes=current_notes,
         seals=models.get_ruler_seals(ruler_name),
+        coats_of_arms=models.get_ruler_coats(ruler_name),
         meta=models.get_meta(),
     )
 
@@ -974,6 +977,81 @@ def ruler_seal_delete(ruler_name, seal_idx):
     return jsonify({"ok": True})
 
 
+# ── Coat of Arms CRUD ─────────────────────────────────────────────────────────
+
+@app.route("/ruler/<path:ruler_name>/coat/add", methods=["POST"])
+def ruler_coat_add(ruler_name):
+    if ruler_name not in RULER_DATA:
+        return jsonify({"error": "Ruler not found"}), 404
+    name = request.form.get("name", "").strip()
+    if not name:
+        return jsonify({"error": "Name required"}), 400
+    idx = models.add_ruler_coat(ruler_name, name)
+    return jsonify({"index": idx, "name": name})
+
+
+@app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/rename", methods=["POST"])
+def ruler_coat_rename(ruler_name, coat_idx):
+    if ruler_name not in RULER_DATA:
+        return jsonify({"error": "Ruler not found"}), 404
+    name = request.form.get("name", "").strip()
+    if not name:
+        return jsonify({"error": "Name required"}), 400
+    if not models.rename_ruler_coat(ruler_name, coat_idx, name):
+        return jsonify({"error": "Coat of arms not found"}), 404
+    return jsonify({"ok": True, "name": name})
+
+
+@app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/upload", methods=["POST"])
+def ruler_coat_upload(ruler_name, coat_idx):
+    if ruler_name not in RULER_DATA:
+        return jsonify({"error": "Ruler not found"}), 404
+    coats = models.get_ruler_coats(ruler_name)
+    if coat_idx < 0 or coat_idx >= len(coats):
+        return jsonify({"error": "Index out of range"}), 400
+    f = request.files.get("image")
+    if not f or not f.filename:
+        return jsonify({"error": "No file"}), 400
+    if not allowed_file(f.filename):
+        return jsonify({"error": "Invalid file type"}), 400
+    ext = f.filename.rsplit(".", 1)[1].lower()
+    safe_ruler = secure_filename(ruler_name.replace(" ", "_").replace("/", "_"))
+    fname = f"coat_{safe_ruler}_{coat_idx}_{uuid.uuid4().hex[:6]}.{ext}"
+    fpath = COATS_FOLDER / fname
+    f.save(str(fpath))
+    _fix_exif_rotation(fpath)
+    old = models.set_ruler_coat_image_db(ruler_name, coat_idx, fname)
+    if old:
+        old_path = COATS_FOLDER / old
+        if old_path.exists():
+            old_path.unlink()
+    return jsonify({"filename": fname, "url": f"/static/coats_of_arms/{fname}"})
+
+
+@app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/delete_image", methods=["POST"])
+def ruler_coat_delete_image(ruler_name, coat_idx):
+    if ruler_name not in RULER_DATA:
+        return jsonify({"error": "Ruler not found"}), 404
+    old = models.remove_ruler_coat_image_db(ruler_name, coat_idx)
+    if old:
+        old_path = COATS_FOLDER / old
+        if old_path.exists():
+            old_path.unlink()
+    return jsonify({"ok": True})
+
+
+@app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/delete", methods=["POST"])
+def ruler_coat_delete(ruler_name, coat_idx):
+    if ruler_name not in RULER_DATA:
+        return jsonify({"error": "Ruler not found"}), 404
+    old_image = models.delete_ruler_coat(ruler_name, coat_idx)
+    if old_image:
+        old_path = COATS_FOLDER / old_image
+        if old_path.exists():
+            old_path.unlink()
+    return jsonify({"ok": True})
+
+
 # ── Export ────────────────────────────────────────────────────────────────────
 
 @app.route("/export", methods=["GET"])
@@ -1002,6 +1080,7 @@ def export_pdf():
         merged = dict(rdata)
         merged["custom_notes"] = db_rulers.get(rname, {}).get("notes", "")
         merged["seals"] = models.get_ruler_seals(rname)
+        merged["coats_of_arms"] = models.get_ruler_coats(rname)
         ruler_info_for_pdf[rname] = merged
 
     pdf_bytes = pdf_generator.generate_pdf(

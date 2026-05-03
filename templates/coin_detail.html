@@ -176,23 +176,20 @@
     {% if coin.catalogue_refs %}
       <section class="detail-section">
         <h3 class="section-heading">Catalogue References</h3>
-        <table class="ref-table">
-          {% set ref_labels = {
-            'ivanauskas': 'Ivanauskas',
-            'bagdonas': 'Bagdonas',
-            'huletski': 'Huletski',
-            'sarankinas': 'Sarankinas',
-            'custom': 'Other',
-          } %}
-          {% for key, val in coin.catalogue_refs.items() %}
-            {% if val %}
-              <tr>
-                <td class="ref-key">{{ ref_labels.get(key, key) }}</td>
-                <td class="ref-val">{{ val }}</td>
-              </tr>
-            {% endif %}
-          {% endfor %}
-        </table>
+        <p class="section-text">{{ coin.catalogue_refs }}</p>
+      </section>
+    {% endif %}
+
+    <!-- Finding place -->
+    {% if coin.finding_place %}
+      <section class="detail-section">
+        <h3 class="section-heading">Finding Place</h3>
+        <p class="section-text">
+          <a href="https://www.google.com/maps?q={{ coin.finding_place }}"
+             target="_blank" rel="noopener" class="finding-place-link">
+            {{ coin.finding_place }} &#x1F4CD;
+          </a>
+        </p>
       </section>
     {% endif %}
 

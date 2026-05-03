@@ -156,25 +156,28 @@
     <!-- ── Section: Catalogue references ─────────────────────────────────── -->
     <fieldset class="form-section">
       <legend class="form-legend">Catalogue References</legend>
-      <div class="form-grid form-grid-2">
 
-        {% set cat_fields = [
-          ('ivanauskas', 'Ivanauskas'),
-          ('bagdonas', 'Bagdonas'),
-          ('huletski', 'Huletski / Huletski-Karpaw'),
-          ('sarankinas', 'Sarankinas'),
-          ('custom', 'Other reference'),
-        ] %}
-        {% for key, label in cat_fields %}
-          <div class="form-group">
-            <label for="cat_{{ key }}">{{ label }}</label>
-            <input type="text" id="cat_{{ key }}" name="cat_{{ key }}"
-                   value="{{ coin.catalogue_refs.get(key, '') if coin and coin.catalogue_refs else '' }}"
-                   class="form-input" placeholder="Catalogue number…">
-          </div>
-        {% endfor %}
-
+      <div class="form-group">
+        <label for="catalogue_refs">References</label>
+        <textarea id="catalogue_refs" name="catalogue_refs" rows="3" class="form-textarea"
+                  placeholder="e.g. Ivanauskas 1S367-11; Huletski-Bagdonas H100 D I">{{ coin.catalogue_refs if coin else '' }}</textarea>
+        <span class="field-hint">All catalogue references in free-form text</span>
       </div>
+
+    </fieldset>
+
+    <!-- ── Section: Finding place ─────────────────────────────────────────── -->
+    <fieldset class="form-section">
+      <legend class="form-legend">Finding Place</legend>
+
+      <div class="form-group">
+        <label for="finding_place">GPS Coordinates <span class="label-hint">(lat, lon)</span></label>
+        <input type="text" id="finding_place" name="finding_place"
+               value="{{ coin.finding_place if coin else '' }}"
+               class="form-input" placeholder="e.g. 54.6872, 25.2797">
+        <span class="field-hint">Latitude, longitude — will link to Google Maps</span>
+      </div>
+
     </fieldset>
 
     <!-- ── Section: Acquisition ──────────────────────────────────────────── -->

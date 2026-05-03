@@ -23,6 +23,7 @@ from reportlab.platypus.flowables import BalancedColumns
 UPLOAD_FOLDER   = Path(__file__).parent / "uploads"
 PORTRAITS_FOLDER = Path(__file__).parent / "static" / "portraits"
 SEALS_FOLDER    = Path(__file__).parent / "static" / "seals"
+COATS_FOLDER    = Path(__file__).parent / "static" / "coats_of_arms"
 
 # ── Unicode font registration ─────────────────────────────────────────────────
 _DEJAVU_DIR = Path("/usr/share/fonts/truetype/dejavu")
@@ -297,6 +298,43 @@ def _ruler_block(ruler_name, ruler_info, styles, doc_width):
         ]))
         elements.append(seal_tbl)
 
+    # Coat of Arms strip (same layout as seals)
+    coats = ruler_info.get("coats_of_arms", [])
+    coat_pairs = []
+    for c in coats:
+        if not c.get("image"):
+            continue
+        img_path = COATS_FOLDER / c["image"]
+        if not img_path.exists():
+            continue
+        try:
+            img = Image(str(img_path))
+            iw, ih = img.imageWidth, img.imageHeight
+            max_side = 2.0 * cm
+            ratio = min(max_side / iw, max_side / ih)
+            img.drawWidth  = iw * ratio
+            img.drawHeight = ih * ratio
+            coat_pairs.append((img, c["name"]))
+        except Exception:
+            pass
+
+    if coat_pairs:
+        elements.append(Spacer(1, 1.5*mm))
+        elements.append(Paragraph("Coat of Arms", styles["seals_label"]))
+        n = len(coat_pairs)
+        cell_w = min(2.5 * cm, doc_width / n)
+        cells = [[p[0] for p in coat_pairs], [Paragraph(p[1], styles["seal_name"]) for p in coat_pairs]]
+        coat_tbl = Table(cells, colWidths=[cell_w] * n)
+        coat_tbl.setStyle(TableStyle([
+            ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
+            ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
+            ("LEFTPADDING",   (0, 0), (-1, -1), 2),
+            ("RIGHTPADDING",  (0, 0), (-1, -1), 2),
+            ("TOPPADDING",    (0, 0), (-1, -1), 1),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
+        ]))
+        elements.append(coat_tbl)
+
     elements.append(Spacer(1, 5*mm))
     return elements
 
@@ -440,19 +478,9 @@ def _coin_block(coin, styles, doc_width, show_prices=True):
         elements.append(Paragraph("<b>Edge:</b> %s" % edge, styles["desc"]))
 
     # ---- catalogue refs ----
-    refs = coin.get("catalogue_refs", {})
+    refs = coin.get("catalogue_refs", "")
     if refs:
-        ref_labels = {
-            "ivanauskas": "Ivanauskas",
-            "bagdonas": "Bagdonas",
-            "huletski": "Huletski",
-            "sarankinas": "Sarankinas",
-            "custom": "Ref.",
-        }
-        ref_str = "  ·  ".join(
-            "%s: %s" % (ref_labels.get(k, k), v) for k, v in refs.items() if v
-        )
-        elements.append(Paragraph(ref_str, styles["cat_ref"]))
+        elements.append(Paragraph(refs, styles["cat_ref"]))
         elements.append(Spacer(1, 2*mm))
 
     # ---- provenance / notes ----

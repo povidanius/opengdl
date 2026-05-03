@@ -166,6 +166,80 @@ def delete_ruler_seal(ruler_name: str, idx: int) -> Optional[str]:
 
 
 # ---------------------------------------------------------------------------
+# Coat of Arms CRUD (same structure as seals)
+# ---------------------------------------------------------------------------
+
+def get_ruler_coats(ruler_name: str) -> list:
+    """Return list of {name, image?} dicts for a ruler's coats of arms."""
+    data = _load()
+    return data.get("rulers", {}).get(ruler_name, {}).get("coats_of_arms", [])
+
+
+def set_ruler_coats(ruler_name: str, coats: list) -> None:
+    data = _load()
+    data.setdefault("rulers", {})
+    data["rulers"].setdefault(ruler_name, {})
+    data["rulers"][ruler_name]["coats_of_arms"] = coats
+    _save(data)
+
+
+def add_ruler_coat(ruler_name: str, name: str) -> int:
+    """Append a new coat of arms entry; returns its index."""
+    data = _load()
+    data.setdefault("rulers", {})
+    data["rulers"].setdefault(ruler_name, {})
+    coats = data["rulers"][ruler_name].setdefault("coats_of_arms", [])
+    coats.append({"name": name})
+    _save(data)
+    return len(coats) - 1
+
+
+def rename_ruler_coat(ruler_name: str, idx: int, name: str) -> bool:
+    data = _load()
+    coats = data.get("rulers", {}).get(ruler_name, {}).get("coats_of_arms", [])
+    if idx < 0 or idx >= len(coats):
+        return False
+    coats[idx]["name"] = name
+    _save(data)
+    return True
+
+
+def set_ruler_coat_image_db(ruler_name: str, idx: int, filename: str) -> Optional[str]:
+    """Set image for a coat of arms; returns old filename if any."""
+    data = _load()
+    coats = data.get("rulers", {}).get(ruler_name, {}).get("coats_of_arms", [])
+    if idx < 0 or idx >= len(coats):
+        return None
+    old = coats[idx].get("image")
+    coats[idx]["image"] = filename
+    _save(data)
+    return old
+
+
+def remove_ruler_coat_image_db(ruler_name: str, idx: int) -> Optional[str]:
+    """Remove image from a coat of arms; returns old filename if any."""
+    data = _load()
+    coats = data.get("rulers", {}).get(ruler_name, {}).get("coats_of_arms", [])
+    if idx < 0 or idx >= len(coats):
+        return None
+    old = coats[idx].pop("image", None)
+    if old is not None:
+        _save(data)
+    return old
+
+
+def delete_ruler_coat(ruler_name: str, idx: int) -> Optional[str]:
+    """Delete a coat of arms entry entirely; returns its image filename if any."""
+    data = _load()
+    coats = data.get("rulers", {}).get(ruler_name, {}).get("coats_of_arms", [])
+    if idx < 0 or idx >= len(coats):
+        return None
+    old_image = coats.pop(idx).get("image")
+    _save(data)
+    return old_image
+
+
+# ---------------------------------------------------------------------------
 # Coin CRUD
 # ---------------------------------------------------------------------------
 
@@ -320,6 +394,7 @@ def search_coins(query: str = "", ruler: str = "", denomination: str = "",
                 coin.get("reverse", ""),
                 coin.get("notes", ""),
                 coin.get("provenance", ""),
+                coin.get("catalogue_refs", ""),
                 " ".join(coin.get("tags", [])),
             ]).lower()
             if q not in haystack:
@@ -400,11 +475,7 @@ def _coin_from_form(f: dict) -> dict:
     else:
         tags = tags_raw
 
-    cat_refs = {}
-    for key in ("ivanauskas", "bagdonas", "huletski", "sarankinas", "custom"):
-        val = f.get(f"cat_{key}", "").strip()
-        if val:
-            cat_refs[key] = val
+    cat_refs = f.get("catalogue_refs", "").strip()
 
     def _float(key):
         try:
@@ -439,6 +510,7 @@ def _coin_from_form(f: dict) -> dict:
         "sale_date": f.get("sale_date", "").strip(),
         "is_sold": bool(f.get("is_sold")),
         "catalogue_refs": cat_refs,
+        "finding_place": f.get("finding_place", "").strip(),
         "provenance": f.get("provenance", "").strip(),
         "notes": f.get("notes", "").strip(),
         "tags": tags,
