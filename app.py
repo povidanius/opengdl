@@ -96,6 +96,7 @@ def _prefill_options():
     """Static reference data for dropdowns."""
     rulers = [
         "Mindaugas",
+        "Gediminas",
         "Algirdas",
         "Kęstutis",
         "Jogaila / Władysław II Jagiełło",
@@ -148,9 +149,7 @@ RULER_DATA = {
         "born": "c. 1203",
         "died": "1263",
         "bio": (
-            "Founder and first King of Lithuania. United Lithuanian tribes into a single state "
-            "and was crowned King in 1253 after accepting Christianity. Assassinated in 1263 "
-            "by rival dukes Daumantas and Treniota."
+            "Mindaugas, crowned King of Lithuania in 1253, is traditionally regarded as the ruler who united the Lithuanian lands. His reign marks an important stage in the formation of Lithuanian statehood and its contacts with medieval Europe. No currently known coins can be securely attributed to Mindaugas, but Lithuania’s early monetary tradition is represented by silver ingot money — the Lithuanian “longs” (ilgieji, or kapos)"
         ),
         "seals": [
             {
@@ -164,6 +163,42 @@ RULER_DATA = {
             },
         ],
     },
+    "Gediminas": {
+        "portrait": "portrait_gediminas.jpg",
+        "full_name": "Gediminas (Gedimin)",
+        "reign": "c. 1316–1341",
+        "born": "c. 1275",
+        "died": "1341",
+        "bio": (
+            "Grand Duke of Lithuania and founder of the Gediminid dynasty that would rule "
+            "for over two centuries. Built Vilnius as the capital and invited European "
+            "craftsmen, merchants, and monks to settle there. Expanded Lithuanian territory "
+            "through diplomacy and conquest, incorporating much of modern Belarus. Famous "
+            "for his letters to Pope John XXII and Hanseatic cities promoting trade and "
+            "religious tolerance."
+        ),
+        "seals": [
+            {
+                "name": "Equestrian Seal of Gediminas (c. 1323)",
+                "description": (
+                    "The earliest well-documented grand ducal seal, known from impressions "
+                    "on Gediminas's Latin letters of 1323 addressed to Pope John XXII and "
+                    "German Hanseatic cities. Shows an armored horseman with raised sword — "
+                    "the Pahonia (Vytis) device that became the enduring state emblem of the "
+                    "Grand Duchy of Lithuania."
+                ),
+            },
+            {
+                "name": "Seal with Columns of Gediminas (Gediminaičiai Pillars)",
+                "description": (
+                    "A seal bearing the dynastic emblem later known as the Columns of "
+                    "Gediminas — a heraldic device of uncertain origin showing a gateway or "
+                    "three stylised pillars. This symbol was adopted by subsequent Gediminid "
+                    "rulers and appears on coinage of the Grand Duchy for centuries."
+                ),
+            },
+        ],
+    },
     "Algirdas": {
         "portrait": "portrait_algirdas.jpg",
         "full_name": "Algirdas (Olgierd)",
@@ -171,10 +206,7 @@ RULER_DATA = {
         "born": "c. 1296",
         "died": "1377",
         "bio": (
-            "Grand Duke of Lithuania who vastly expanded the state eastward, annexing large "
-            "parts of the former Kievan Rus'. Co-ruled with his brother Kęstutis — Algirdas "
-            "directed eastern campaigns while Kęstutis defended against the Teutonic Knights "
-            "in the west. Launched three campaigns against Moscow (1368, 1370, 1372)."
+            "Algirdas, Grand Duke of Lithuania from 1345 to 1377, was one of the most powerful rulers of medieval Lithuania. Together with his brother Kęstutis, he secured the Grand Duchy’s position between the Teutonic Order, Muscovy and the lands of Rus’. His reign saw major eastern and southern expansion, making Lithuania one of the largest states in Europe and preparing the ground for the later Jagiellonian dynasty through his son Jogaila"
         ),
         "seals": [
             {
