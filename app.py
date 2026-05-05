@@ -95,6 +95,8 @@ def _migrate_seal_storage():
 def _prefill_options():
     """Static reference data for dropdowns."""
     rulers = [
+        "Mindaugas",
+        "Algirdas",
         "Kęstutis",
         "Jogaila / Władysław II Jagiełło",
         "Vladimir Olgerdovich",
@@ -111,7 +113,8 @@ def _prefill_options():
         "John II Casimir Vasa",
     ]
     denominations = [
-        "Denar", "Double Denar", "Obol", "Half-Grosz (Półgrosz)", "Grosz",
+        "Obol", "Denar", "Double Denar", "Schilling (Szeląg)",
+        "Half-Grosz (Półgrosz)", "Grosz",
         "Trojak (3 Grosze)", "Czworak (4 Grosze)", "Szóstak (6 Groszy)",
         "Ort (Quarter Thaler)", "Półtalar (Half Thaler)", "Talar",
         "Ducat",
@@ -138,6 +141,53 @@ def _prefill_options():
 # ── Ruler biographical data (static defaults; notes are editable in DB) ───────
 
 RULER_DATA = {
+    "Mindaugas": {
+        "portrait": "portrait_mindaugas.jpg",
+        "full_name": "Mindaugas (Mindovg)",
+        "reign": "c. 1236–1263",
+        "born": "c. 1203",
+        "died": "1263",
+        "bio": (
+            "Founder and first King of Lithuania. United Lithuanian tribes into a single state "
+            "and was crowned King in 1253 after accepting Christianity. Assassinated in 1263 "
+            "by rival dukes Daumantas and Treniota."
+        ),
+        "seals": [
+            {
+                "name": "Royal Seal of Mindaugas (c. 1253–1263)",
+                "description": (
+                    "The earliest known seal of a Lithuanian ruler, used after his coronation "
+                    "in 1253. Surviving impressions on papal correspondence show a mounted "
+                    "knight — the prototype of the later Pahonia (Vytis) device. Latin legend: "
+                    "MINDOWE DEI GRACIA REX LITTWANIE."
+                ),
+            },
+        ],
+    },
+    "Algirdas": {
+        "portrait": "portrait_algirdas.jpg",
+        "full_name": "Algirdas (Olgierd)",
+        "reign": "1345–1377",
+        "born": "c. 1296",
+        "died": "1377",
+        "bio": (
+            "Grand Duke of Lithuania who vastly expanded the state eastward, annexing large "
+            "parts of the former Kievan Rus'. Co-ruled with his brother Kęstutis — Algirdas "
+            "directed eastern campaigns while Kęstutis defended against the Teutonic Knights "
+            "in the west. Launched three campaigns against Moscow (1368, 1370, 1372)."
+        ),
+        "seals": [
+            {
+                "name": "Equestrian Seal of Algirdas",
+                "description": (
+                    "Grand ducal seal showing an armored horseman with raised sword and "
+                    "shield — an early Pahonia (Vytis) device. Used on charters and treaties "
+                    "during the expansion of Lithuanian rule over Ruthenian lands. Known from "
+                    "impressions on documents of the 1350s–1370s."
+                ),
+            },
+        ],
+    },
     "Kęstutis": {
         "portrait": "portrait_kestutis.jpg",
         "full_name": "Kęstutis of Lithuania",
@@ -294,9 +344,7 @@ RULER_DATA = {
         "born": "1427",
         "died": "1492",
         "bio": (
-            "One of the longest-reigning Grand Dukes and Kings of Poland. "
-            "Waged the Thirteen Years' War (1454–1466) against the Teutonic Knights, "
-            "incorporating Royal Prussia into Poland."
+            "Casimir IV Jagiellon, Grand Duke of Lithuania from 1440 and King of Poland from 1447, ruled until his death in 1492. During his reign, the Thirteen Years’ War with the Teutonic Order ended with the Second Peace of Toruń in 1466, bringing Royal Prussia under the Polish Crown and reducing the remaining Teutonic state to a Polish fief."
         ),
         "seals": [
             {
@@ -331,9 +379,7 @@ RULER_DATA = {
         "born": "1461",
         "died": "1506",
         "bio": (
-            "Grand Duke of Lithuania and King of Poland. Faced Ottoman and Muscovite "
-            "pressure on the eastern borders. Granted the Privilege of Mielnik "
-            "expanding noble rights."
+            "Alexander Jagiellon, Grand Duke of Lithuania from 1492 and King of Poland from 1501, ruled amid Muscovite and Tatar pressure on the Grand Duchy’s frontiers. His reign marked an important step in Lithuanian monetary history: the reform of 1495 introduced a decimal system based on the groat counted as 10 denars and brought Lithuanian coinage closer to contemporary western European monetary standards. Denars and half-groats were struck in Vilnius, while the full groat appeared only later, under Sigismund the Old."
         ),
         "seals": [
             {
@@ -368,9 +414,7 @@ RULER_DATA = {
         "born": "1467",
         "died": "1548",
         "bio": (
-            "Patron of the Renaissance in the Polish-Lithuanian state. Established "
-            "a modern monetary system and reorganised the royal mint. His long reign "
-            "saw cultural and economic flourishing."
+            "Sigismund I the Old, King of Poland and Grand Duke of Lithuania from 1506 to 1548, was a major Renaissance ruler of the Jagiellonian dynasty. His reign saw cultural flourishing in the Polish-Lithuanian lands and important monetary reforms that brought coinage closer to contemporary European standards. Continuing the reform begun under Alexander Jagiellon, Sigismund’s rule saw dated Lithuanian half-groats from 1509 (1508(?)) and the first Lithuanian groats minted in Vilnius in 1535–1536."
         ),
         "seals": [
             {
@@ -407,9 +451,7 @@ RULER_DATA = {
         "born": "1520",
         "died": "1572",
         "bio": (
-            "Last Jagiellonian ruler. Signed the Union of Lublin (1569), creating the "
-            "Polish-Lithuanian Commonwealth. Major patron of the arts; amassed one of "
-            "Europe's finest tapestry collections."
+            "Sigismund II Augustus, the last male Jagiellonian ruler, governed Lithuania from 1544 and ruled as King of Poland and Grand Duke of Lithuania from 1548 to 1572. His reign culminated in the Union of Lublin of 1569, which created the Polish-Lithuanian Commonwealth. A distinguished Renaissance patron and collector, he assembled a celebrated tapestry collection and fostered a refined court culture. In numismatic history, his rule marks one of the richest periods of Lithuanian coinage: the Vilnius mint issued an exceptional variety of denominations, notable not only for their monetary importance but also for their increasingly artful, European-style execution."
         ),
         "seals": [
             {
@@ -454,9 +496,7 @@ RULER_DATA = {
         "born": "1533",
         "died": "1586",
         "bio": (
-            "Prince of Transylvania elected King of Poland and Grand Duke of Lithuania. "
-            "Brilliant military commander who recaptured Livonia from Ivan the Terrible "
-            "of Russia."
+            "Stephen Báthory, Prince of Transylvania and elected ruler of the Polish-Lithuanian Commonwealth, reigned as King of Poland and Grand Duke of Lithuania from 1576 to 1586. Renowned as an energetic and capable military commander, he successfully challenged Ivan IV of Muscovy in the final phase of the Livonian War, recovering Polotsk and securing the Commonwealth’s position in Livonia. His reign also left a lasting cultural legacy in Lithuania: in 1579 he granted the privilege establishing the Vilnius Academy, the foundation of today’s Vilnius University."
         ),
         "seals": [
             {
@@ -494,9 +534,7 @@ RULER_DATA = {
         "born": "1566",
         "died": "1632",
         "bio": (
-            "Longest-reigning Vasa monarch. Moved the capital from Kraków to Warsaw. "
-            "Won significant victories against Russia and Sweden, briefly placing a "
-            "Polish prince on the Russian throne."
+            "Sigismund III Vasa, Grand Duke of Lithuania and King of Poland from 1587 to 1632, was the first Vasa ruler of the Polish-Lithuanian Commonwealth. His reign was shaped in part by dynastic conflict with Sweden and by wars with Muscovy, in which the Grand Duchy of Lithuania played a significant role. In Lithuanian numismatic history, his rule is notable for the continued activity of the Vilnius Mint, which produced a broad range of denominations, including double-denarii, shillings, groats, one-and-a-half-groats, three-groats, and prestigious gold issues of 1, 5, and 10 ducats."
         ),
         "seals": [
             {
@@ -578,9 +616,7 @@ RULER_DATA = {
         "born": "1609",
         "died": "1672",
         "bio": (
-            "Survived 'The Deluge' — simultaneous invasions by Sweden, Russia, "
-            "Brandenburg, and Cossacks devastated Poland-Lithuania. Abdicated in 1668, "
-            "the last Vasa king of Poland."
+            "John II Casimir Vasa, Grand Duke of Lithuania and King of Poland from 1648 to 1668, was the last Vasa ruler of the Polish-Lithuanian Commonwealth. His reign was shaped by major wars with the Cossacks, Muscovy and Sweden. Numismatically, it is notable for the mass issue of copper shillings, the boratynki, struck in large quantities at Vilnius and Kaunas to support wartime finances. He abdicated in 1668."
         ),
         "seals": [
             {

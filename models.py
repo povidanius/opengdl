@@ -35,13 +35,14 @@ DENOM_ORDER = {
     "Obol":                  0,
     "Denar":                 1,
     "Double Denar":          2,
-    "Half-Grosz (Półgrosz)": 3,
-    "Grosz":                 4,
-    "Trojak (3 Grosze)":     5,
-    "Czworak (4 Grosze)":    6,
-    "Szóstak (6 Groszy)":    7,
-    "Ort (18 Groszy)":       8,
-    "Talar":                 9,
+    "Schilling (Szeląg)":    3,
+    "Half-Grosz (Półgrosz)": 4,
+    "Grosz":                 5,
+    "Trojak (3 Grosze)":     6,
+    "Czworak (4 Grosze)":    7,
+    "Szóstak (6 Groszy)":    8,
+    "Ort (18 Groszy)":       9,
+    "Talar":                10,
 }
 
 
