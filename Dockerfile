@@ -1,9 +1,10 @@
-FROM python:3.7-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install system dependencies (fonts required by ReportLab PDF generator)
-RUN apt-get update && apt-get install -y --no-install-recommends fonts-dejavu && rm -rf /var/lib/apt/lists/*
+# Install system dependencies (fonts + build deps for ReportLab C extensions)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fonts-dejavu libfreetype6-dev gcc && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 COPY requirements.txt .
