@@ -3,9 +3,9 @@ Still a very early version, but you may find it useful for organising your colle
 
 How to run:
 
-1.) git clone https://github.com/povidanius/opengdl/
-2.) cd opengdl
-3.) consult: README.txt for further steps (on Windows OS not tested yet)
+- 1.) git clone https://github.com/povidanius/opengdl/
+- 2.) cd opengdl
+- 3.) consult: README.txt for further steps (on Windows OS not tested yet)
 
 Screenshots:
 
