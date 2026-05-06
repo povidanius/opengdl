@@ -1,4 +1,4 @@
-This is a Python app for the numismatic catalogue of coins from the Grand Duchy of Lithuania. It is almost entirely coded using Claude Code.
+This is a Python app for the numismatic catalogue of coins from the Grand Duchy of Lithuania and Lithuanian Republic. It is almost entirely coded using Claude Code.
 Still a very early version, but you may find it useful for organising your collection.
 
 How to run, consult: README.txt (on Windows OS not tested yet)
