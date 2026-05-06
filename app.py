@@ -113,6 +113,8 @@ def _prefill_options():
         "Władysław IV Vasa",
         "John II Casimir Vasa",
         "Augustus II the Strong",
+        "Lietuvos Respublika (1918–1940)",
+        "Lietuvos Respublika (from 1990)",
     ]
     denominations = [
         "Obol", "Denar", "Double Denar", "Schilling (Szeląg)",
@@ -122,8 +124,7 @@ def _prefill_options():
         "Ducat",
     ]
     mints = [
-        "Vilnius", "Riga", "Grodno", "Brest", "Kraków",
-        "Olkusz", "Poznań", "Gdańsk", "Malbork", "Wschowa",
+        "Vilnius", "Kaunas", "Other",
     ]
     materials = ["Silver", "Gold", "Billon", "Copper", "Electrum"]
     conditions = [
@@ -158,7 +159,7 @@ RULER_DATA = {
                 "description": (
                     "The earliest known seal of a Lithuanian ruler, used after his coronation "
                     "in 1253. Surviving impressions on papal correspondence show a mounted "
-                    "knight — the prototype of the later Pahonia (Vytis) device. Latin legend: "
+                    "knight — the prototype of the later Vytis. Latin legend: "
                     "MINDOWE DEI GRACIA REX LITTWANIE."
                 ),
             },
@@ -180,12 +181,12 @@ RULER_DATA = {
         ),
         "seals": [
             {
-                "name": "Equestrian Seal of Gediminas (c. 1323)",
+                "name": "Seal of Gediminas (c. 1323)",
                 "description": (
                     "The earliest well-documented grand ducal seal, known from impressions "
                     "on Gediminas's Latin letters of 1323 addressed to Pope John XXII and "
                     "German Hanseatic cities. Shows an armored horseman with raised sword — "
-                    "the Pahonia (Vytis) device that became the enduring state emblem of the "
+                    "the Vytis that became the enduring state emblem of the "
                     "Grand Duchy of Lithuania."
                 ),
             },
@@ -214,7 +215,7 @@ RULER_DATA = {
                 "name": "Equestrian Seal of Algirdas",
                 "description": (
                     "Grand ducal seal showing an armored horseman with raised sword and "
-                    "shield — an early Pahonia (Vytis) device. Used on charters and treaties "
+                    "shield — an early Vytis. Used on charters and treaties "
                     "during the expansion of Lithuanian rule over Ruthenian lands. Known from "
                     "impressions on documents of the 1350s–1370s."
                 ),
@@ -237,7 +238,7 @@ RULER_DATA = {
                 "name": "Equestrian Seal of Kęstutis",
                 "description": (
                     "Wax seal showing an armored knight on horseback facing left, "
-                    "sword raised — an early form of the Pahonia (Vytis) device used by "
+                    "sword raised — an early form of the Vytis device used by "
                     "Lithuanian dukes. Known impressions survive from c. 1379."
                 ),
             },
@@ -256,11 +257,11 @@ RULER_DATA = {
         ),
         "seals": [
             {
-                "name": "Grand Ducal Seal of Lithuania (Pahonia, c. 1386)",
+                "name": "Grand Ducal Seal of Lithuania (Vytis, c. 1386)",
                 "description": (
                     "Large equestrian seal showing an armored knight on horseback with "
                     "sword raised and a shield bearing the double Jagiellonian cross — "
-                    "the Pahonia (Vytis). Latin legend: WLADISLAI DEI GRACIA REGIS POLONIE "
+                    "the Vytis. Latin legend: WLADISLAI DEI GRACIA REGIS POLONIE "
                     "MAGNIQUE DUCIS LITTWANIE."
                 ),
             },
@@ -319,11 +320,11 @@ RULER_DATA = {
         ),
         "seals": [
             {
-                "name": "Great Seal of Vytautas (Equestrian / Pahonia, c. 1392–1407)",
+                "name": "Great Seal of Vytautas",
                 "description": (
                     "Large equestrian seal — the most famous of Vytautas's seals — showing "
                     "a fully armored knight on horseback with sword raised and a shield "
-                    "bearing the double cross (Jagiellonian cross). The Pahonia device became "
+                    "bearing the double cross (Jagiellonian cross). The Vytis became "
                     "the enduring symbol of the Grand Duchy under his reign."
                 ),
             },
@@ -362,7 +363,7 @@ RULER_DATA = {
                 "description": (
                     "Equestrian seal used during his regency (1386–1392) as Grand Duke's "
                     "lieutenant in Lithuania. Shows an armored rider — a variant of the "
-                    "Pahonia device — asserting his authority in the Grand Duchy while "
+                    "Vytis — asserting his authority in the Grand Duchy while "
                     "Jogaila reigned in Kraków. Also appears on charters issued as Prince "
                     "of Kyiv (1394–1397)."
                 ),
@@ -384,14 +385,14 @@ RULER_DATA = {
                 "name": "Great Royal Seal of Poland (Sigillum Maius Regni Poloniae)",
                 "description": (
                     "Majesty seal depicting the enthroned king holding scepter and orb, "
-                    "flanked by the Polish white eagle and Lithuanian Pahonia. One of the "
+                    "flanked by the Polish white eagle and Lithuanian Vytis. One of the "
                     "largest and most elaborate seals of the Jagiellonian era."
                 ),
             },
             {
                 "name": "Lithuanian Grand Ducal Equestrian Seal",
                 "description": (
-                    "Shows the Pahonia horseman with the double Jagiellonian cross on "
+                    "Shows the Vytis horseman with the double Jagiellonian cross on "
                     "the shield. Used on documents issued for the Grand Duchy of Lithuania "
                     "separately from the Polish royal seal."
                 ),
@@ -419,14 +420,14 @@ RULER_DATA = {
                 "name": "Great Royal Seal of Poland",
                 "description": (
                     "Enthroned majesty seal with the king holding scepter and orb. "
-                    "Combined Polish eagle and Lithuanian Pahonia in the heraldic field. "
+                    "Combined Polish eagle and Lithuanian Vytis in the heraldic field. "
                     "Legend: ALEXANDRI DEI GRACIA REGIS POLONIE MAGNIQUE DUCIS LITTWANIE."
                 ),
             },
             {
-                "name": "Lithuanian Grand Ducal Seal (Pahonia with Double Cross)",
+                "name": "Lithuanian Grand Ducal Seal (Vytis with Double Cross)",
                 "description": (
-                    "Equestrian seal showing the Pahonia horseman bearing the double "
+                    "Equestrian seal showing the Vytis horseman bearing the double "
                     "Jagiellonian cross. Issued for Lithuanian affairs separately from "
                     "the Polish crown seal."
                 ),
@@ -455,14 +456,14 @@ RULER_DATA = {
                 "description": (
                     "Elaborate double-sided majesty seal. Obverse: enthroned king in full "
                     "regalia with Polish eagle shield. Reverse (counter-seal): the crowned "
-                    "Lithuanian Pahonia. The earliest examples show Renaissance-style "
+                    "Lithuanian Vytis. The earliest examples show Renaissance-style "
                     "architectural framing, reflecting his patronage of the arts."
                 ),
             },
             {
                 "name": "Grand Ducal Seal of Lithuania",
                 "description": (
-                    "Equestrian Pahonia seal used specifically for Lithuanian affairs. "
+                    "Vytis seal used specifically for Lithuanian affairs. "
                     "The double Jagiellonian cross appears on the horseman's shield; "
                     "the Columns of Gediminas are present in the border."
                 ),
@@ -499,7 +500,7 @@ RULER_DATA = {
             {
                 "name": "Lithuanian Grand Ducal Seal with SA Monogram",
                 "description": (
-                    "Equestrian Pahonia seal bearing the double Jagiellonian cross. "
+                    "Vytis seal bearing the double Jagiellonian cross. "
                     "Uniquely features the crowned SA (Sigismundus Augustus) monogram "
                     "in the field, making it personally identifiable among Jagiellonian seals."
                 ),
@@ -537,15 +538,15 @@ RULER_DATA = {
                 "description": (
                     "Majesty seal showing the enthroned king holding sword and orb. "
                     "The heraldic field combines the arms of Poland (white eagle), "
-                    "Lithuania (Pahonia), and the Báthory family device (three wolf teeth "
+                    "Lithuania (Vytis), and the Báthory family device (three wolf teeth "
                     "arranged in a diagonal band). Latin legend names him King of Poland, "
                     "Grand Duke of Lithuania, and Prince of Transylvania."
                 ),
             },
             {
-                "name": "Lithuanian Grand Ducal Seal (Pahonia with Báthory Arms)",
+                "name": "Lithuanian Grand Ducal Seal (Vytis with Báthory Arms)",
                 "description": (
-                    "Equestrian Pahonia seal. The Báthory three-wolf-teeth coat of arms "
+                    "Vytis seal. The Báthory three-wolf-teeth coat of arms "
                     "appears in the corner of the field, integrating Transylvanian heraldry "
                     "into the traditional Lithuanian seal imagery."
                 ),
@@ -582,7 +583,7 @@ RULER_DATA = {
             {
                 "name": "Grand Ducal Seal of Lithuania",
                 "description": (
-                    "Equestrian Pahonia seal with the Vasa sheaf added to the heraldic "
+                    "Vytis seal with the Vasa sheaf added to the heraldic "
                     "field alongside the traditional double cross. Issued separately for "
                     "acts concerning the Grand Duchy of Lithuania."
                 ),
@@ -591,7 +592,7 @@ RULER_DATA = {
                 "name": "Equestrian Seal (Cavalier Seal)",
                 "description": (
                     "Shows the king himself on horseback in full armor — a personal "
-                    "equestrian seal distinct from the Pahonia device. Used on military "
+                    "equestrian seal distinct from the Vytis. Used on military "
                     "commissions and grants to the army."
                 ),
             },
@@ -629,7 +630,7 @@ RULER_DATA = {
             {
                 "name": "Grand Ducal Seal of Lithuania",
                 "description": (
-                    "Pahonia equestrian seal with Vasa dynastic elements. Issued for "
+                    "Vytis seal with Vasa dynastic elements. Issued for "
                     "matters of the Grand Duchy separately from the Polish crown seal."
                 ),
             },
@@ -664,7 +665,7 @@ RULER_DATA = {
             {
                 "name": "Lithuanian Grand Ducal Seal",
                 "description": (
-                    "Pahonia equestrian seal with Vasa sheaf in the field. "
+                    "Vytis seal with Vasa sheaf in the field. "
                     "As with all Commonwealth rulers, Lithuanian acts were sealed "
                     "separately from Polish crown documents."
                 ),
@@ -701,7 +702,7 @@ RULER_DATA = {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
                 "description": (
                     "Majesty seal showing the enthroned king in full regalia. The quartered "
-                    "shield combines the arms of Poland (white eagle), Lithuania (Pahonia), "
+                    "shield combines the arms of Poland (white eagle), Lithuania (Vytis), "
                     "and Saxony (the crossed swords of the Electorate). Latin legend names him "
                     "King of Poland, Grand Duke of Lithuania, and Elector of Saxony."
                 ),
@@ -715,6 +716,27 @@ RULER_DATA = {
                 ),
             },
         ],
+    },
+    "Lietuvos Respublika (1918\u20131940)": {
+        "portrait": "portrait_lr_1918.jpg",
+        "full_name": "Lietuvos Respublika (1918\u20131940)",
+        "reign": "1918\u20131940",
+        "born": "",
+        "died": "",
+        "bio": (
+            "The Republic of Lithuania restored its modern statehood on 16 February 1918, when the Council of Lithuania (Lietuvos Taryba) signed the Act of Independence in Vilnius. The interwar republic established its own national currency: the litas, divided into 100 centai, was introduced in 1922. The first Lithuanian coins entered circulation in 1925, with bronze denominations struck at King’s Norton Metal Works in Birmingham and silver denominations at the Royal Mint in London; from 1936, coins were also struck in Kaunas at the Spindulys mint. Designed by Juozas Zikaras, the coins featured national symbols such as the Vytis and the Columns of Gediminas, together with plant and agricultural motifs reflecting the cultural and economic character of the young state. Unfortunatelly, Lithuania’s independent interwar statehood was interrupted by the Soviet occupation of June 1940."
+        ),
+        "seals": [],
+    },
+    "Lietuvos Respublika (from 1990)": {
+        "portrait": "flag_lithuania.png",
+        "full_name": "Lietuvos Respublika (nuo 1990)",
+        "reign": "1990\u2013present",
+        "born": "",
+        "died": "",
+        "bio": (
+            "The Republic of Lithuania re-established its independence on 11 March 1990, when the Supreme Council of the Republic of Lithuania adopted the Act of the Re-Establishment of the State of Lithuania. The litas returned to circulation on 25 June 1993, replacing the provisional talonas, and was divided into 100 centai. Modern Lithuanian coinage continued the use of national symbols, especially the Vytis and the Columns of Gediminas, while the restored Lithuanian Mint in Vilnius became the main centre for striking Lithuanian circulation and collector coins. In 2015 Lithuania adopted the euro; Lithuanian euro coins bear the Vytis on the national side."
+        "seals": [],
     },
 }
 
