@@ -50,6 +50,10 @@
     <span class="footer-sep">·</span>
     <span>{{ meta.owner }}</span>
   {% endif %}
+  {% if meta.confidential %}
+    <span class="footer-sep">·</span>
+    <span class="footer-confidential">Confidential</span>
+  {% endif %}
 </footer>
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>

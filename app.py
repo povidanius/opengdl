@@ -112,6 +112,7 @@ def _prefill_options():
         "Sigismund III Vasa",
         "Władysław IV Vasa",
         "John II Casimir Vasa",
+        "Augustus II the Strong",
     ]
     denominations = [
         "Obol", "Denar", "Double Denar", "Schilling (Szeląg)",
@@ -678,6 +679,43 @@ RULER_DATA = {
             },
         ],
     },
+    "Augustus II the Strong": {
+        "portrait": "portrait_augustus_ii.jpg",
+        "full_name": "Augustus II the Strong (Friedrich August I of Saxony)",
+        "reign": "1697–1706, 1709–1733",
+        "born": "1670",
+        "died": "1733",
+        "bio": (
+            "Augustus II the Strong, Elector of Saxony and King of Poland and Grand Duke "
+            "of Lithuania, ruled in two periods: 1697–1706 and 1709–1733. A prominent figure "
+            "of the Baroque era, he is remembered for his ambitious political projects, lavish "
+            "court in Dresden, and his role in the Great Northern War against Charles XII of "
+            "Sweden. His reign brought Saxony's advanced minting technology to the Commonwealth: "
+            "Lithuanian coinage of this period includes shillings and groats struck at the "
+            "Grodno mint, as well as thalers and tin coinage. Augustus is also famed for "
+            "founding the Meissen porcelain manufactory and for his extraordinary art "
+            "collections that enriched Dresden's cultural heritage."
+        ),
+        "seals": [
+            {
+                "name": "Great Royal Seal of Poland (Sigillum Maius)",
+                "description": (
+                    "Majesty seal showing the enthroned king in full regalia. The quartered "
+                    "shield combines the arms of Poland (white eagle), Lithuania (Pahonia), "
+                    "and Saxony (the crossed swords of the Electorate). Latin legend names him "
+                    "King of Poland, Grand Duke of Lithuania, and Elector of Saxony."
+                ),
+            },
+            {
+                "name": "Electoral Seal of Saxony",
+                "description": (
+                    "Saxon electoral seal bearing the crossed swords device and the electoral "
+                    "bonnet, used for acts concerning the Electorate of Saxony. Often employed "
+                    "alongside the Polish royal seal on documents of dual relevance."
+                ),
+            },
+        ],
+    },
 }
 
 
@@ -1157,6 +1195,7 @@ def export_pdf():
         owner=meta.get("owner", ""),
         show_prices=meta.get("show_prices", True),
         ruler_data=ruler_info_for_pdf,
+        confidential=meta.get("confidential", True),
     )
 
     return Response(
@@ -1185,6 +1224,7 @@ def settings():
             owner=request.form.get("owner", "").strip(),
             show_prices="show_prices" in request.form,
             per_page=per_page,
+            confidential="confidential" in request.form,
         )
         flash("Settings saved.", "success")
         return redirect(url_for("settings"))

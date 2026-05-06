@@ -25,6 +25,15 @@
         </label>
         <p class="form-hint">When unchecked, all price information is hidden in the catalogue and excluded from exported PDFs.</p>
       </div>
+
+      <div class="form-group form-group-check">
+        <label class="check-label">
+          <input type="checkbox" name="confidential" id="confidential"
+                 {% if meta.confidential %}checked{% endif %}>
+          Confidential
+        </label>
+        <p class="form-hint">When checked, a "Confidential" notice is displayed in the page footer and in exported PDFs.</p>
+      </div>
     </fieldset>
 
     <fieldset class="form-section">

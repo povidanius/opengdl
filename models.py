@@ -15,6 +15,9 @@ DB_DEFAULT_PATH = Path(__file__).parent / "data" / "collection_default.json"
 
 # Hardcoded ruler reign-start years for canonical sort order
 RULER_REIGN_START = {
+    "Mindaugas":                      1253,
+    "Gediminas":                      1316,
+    "Algirdas":                       1345,
     "Kęstutis":                       1381,
     "Vladimir Olgerdovich":           1362,
     "Jogaila / Władysław II Jagiełło": 1377,
@@ -27,6 +30,7 @@ RULER_REIGN_START = {
     "Gothard Ketler":                 1561,
     "Stephen Báthory":                1576,
     "Sigismund III Vasa":             1587,
+    "Władysław IV Vasa":              1632,
     "John II Casimir Vasa":           1648,
 }
 
@@ -66,16 +70,18 @@ def get_meta() -> dict:
     meta = _load()["meta"]
     meta.setdefault("show_prices", True)
     meta.setdefault("per_page", 100)
+    meta.setdefault("confidential", True)
     return meta
 
 
 def update_meta(name: str, owner: str, show_prices: bool = True,
-                per_page: int = 100) -> None:
+                per_page: int = 100, confidential: bool = True) -> None:
     data = _load()
     data["meta"]["collection_name"] = name
     data["meta"]["owner"] = owner
     data["meta"]["show_prices"] = show_prices
     data["meta"]["per_page"] = per_page
+    data["meta"]["confidential"] = confidential
     _save(data)
 
 

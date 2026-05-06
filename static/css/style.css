@@ -138,6 +138,7 @@ img { max-width: 100%; display: block; }
   text-transform: uppercase;
 }
 .footer-sep { margin: 0 .5rem; }
+.footer-confidential { color: var(--gold); font-weight: 600; }
 
 /* ── Stats bar ────────────────────────────────────────────── */
 .stats-bar {

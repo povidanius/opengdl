@@ -157,7 +157,7 @@ def _build_styles():
 
 # ── Page templates ────────────────────────────────────────────────────────────
 
-def _header_footer(canvas, doc, collection_name, owner):
+def _header_footer(canvas, doc, collection_name, owner, confidential=True):
     canvas.saveState()
     w, h = A4
 
@@ -173,7 +173,8 @@ def _header_footer(canvas, doc, collection_name, owner):
     canvas.setFont("DejaVuSans", 7)
     canvas.drawString(2*cm, 1*cm, owner)
     canvas.drawCentredString(w/2, 1*cm, "Page %d" % doc.page)
-    canvas.drawRightString(w - 2*cm, 1*cm, "Confidential")
+    if confidential:
+        canvas.drawRightString(w - 2*cm, 1*cm, "Confidential")
 
     # Gold rule
     canvas.setStrokeColor(GOLD)
@@ -530,7 +531,7 @@ def _cover_page(collection_name, owner, coin_count, styles):
 # ── Public API ────────────────────────────────────────────────────────────────
 
 def generate_pdf(coins, collection_name, owner, show_prices=True,
-                 ruler_data=None):
+                 ruler_data=None, confidential=True):
     """Return PDF bytes for the given list of coin dicts.
 
     ruler_data: dict mapping ruler_name -> {portrait, full_name, reign,
@@ -553,7 +554,7 @@ def generate_pdf(coins, collection_name, owner, show_prices=True,
         return PageTemplate(
             id="main_tpl",
             frames=[frame],
-            onPage=lambda c, d: _header_footer(c, d, collection_name, owner),
+            onPage=lambda c, d: _header_footer(c, d, collection_name, owner, confidential),
         )
 
     doc = BaseDocTemplate(

@@ -275,9 +275,19 @@
       {% else %}
         <a href="{{ url_for('index') }}" class="btn-secondary btn-lg">Cancel</a>
       {% endif %}
+      {% if coin %}
+        <button type="button" class="btn-danger btn-lg" style="margin-left:auto"
+                onclick="if(confirm('Delete this coin from the collection? This cannot be undone.')){document.getElementById('delete-form').submit()}">
+          Delete Coin
+        </button>
+      {% endif %}
     </div>
 
   </form>
+
+  {% if coin %}
+  <form id="delete-form" method="post" action="{{ url_for('coin_delete', coin_id=coin.id) }}"></form>
+  {% endif %}
 </div>
 
 <script>
