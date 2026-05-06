@@ -736,6 +736,7 @@ RULER_DATA = {
         "died": "",
         "bio": (
             "The Republic of Lithuania re-established its independence on 11 March 1990, when the Supreme Council of the Republic of Lithuania adopted the Act of the Re-Establishment of the State of Lithuania. The litas returned to circulation on 25 June 1993, replacing the provisional talonas, and was divided into 100 centai. Modern Lithuanian coinage continued the use of national symbols, especially the Vytis and the Columns of Gediminas, while the restored Lithuanian Mint in Vilnius became the main centre for striking Lithuanian circulation and collector coins. In 2015 Lithuania adopted the euro; Lithuanian euro coins bear the Vytis on the national side."
+        ),
         "seals": [],
     },
 }
