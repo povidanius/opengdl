@@ -156,12 +156,7 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Royal Seal of Mindaugas (c. 1253–1263)",
-                "description": (
-                    "The earliest known seal of a Lithuanian ruler, used after his coronation "
-                    "in 1253. Surviving impressions on papal correspondence show a mounted "
-                    "knight — the prototype of the later Vytis. Latin legend: "
-                    "MINDOWE DEI GRACIA REX LITTWANIE."
-                ),
+                "description": "",
             },
         ],
     },
@@ -182,22 +177,11 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Seal of Gediminas (c. 1323)",
-                "description": (
-                    "The earliest well-documented grand ducal seal, known from impressions "
-                    "on Gediminas's Latin letters of 1323 addressed to Pope John XXII and "
-                    "German Hanseatic cities. Shows an armored horseman with raised sword — "
-                    "the Vytis that became the enduring state emblem of the "
-                    "Grand Duchy of Lithuania."
-                ),
+                "description": "",
             },
             {
                 "name": "Seal with Columns of Gediminas (Gediminaičiai Pillars)",
-                "description": (
-                    "A seal bearing the dynastic emblem later known as the Columns of "
-                    "Gediminas — a heraldic device of uncertain origin showing a gateway or "
-                    "three stylised pillars. This symbol was adopted by subsequent Gediminid "
-                    "rulers and appears on coinage of the Grand Duchy for centuries."
-                ),
+                "description": "",
             },
         ],
     },
@@ -213,12 +197,7 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Equestrian Seal of Algirdas",
-                "description": (
-                    "Grand ducal seal showing an armored horseman with raised sword and "
-                    "shield — an early Vytis. Used on charters and treaties "
-                    "during the expansion of Lithuanian rule over Ruthenian lands. Known from "
-                    "impressions on documents of the 1350s–1370s."
-                ),
+                "description": "",
             },
         ],
     },
@@ -236,11 +215,7 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Equestrian Seal of Kęstutis",
-                "description": (
-                    "Wax seal showing an armored knight on horseback facing left, "
-                    "sword raised — an early form of the Vytis device used by "
-                    "Lithuanian dukes. Known impressions survive from c. 1379."
-                ),
+                "description": "",
             },
         ],
     },
@@ -258,28 +233,15 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Grand Ducal Seal of Lithuania (Vytis, c. 1386)",
-                "description": (
-                    "Large equestrian seal showing an armored knight on horseback with "
-                    "sword raised and a shield bearing the double Jagiellonian cross — "
-                    "the Vytis. Latin legend: WLADISLAI DEI GRACIA REGIS POLONIE "
-                    "MAGNIQUE DUCIS LITTWANIE."
-                ),
+                "description": "",
             },
             {
                 "name": "Great Royal Seal of Poland",
-                "description": (
-                    "Majesty seal depicting the enthroned king holding orb and scepter, "
-                    "with the Polish white eagle on his shield. Used on the most solemn "
-                    "royal documents after 1386."
-                ),
+                "description": "",
             },
             {
                 "name": "Counter-seal",
-                "description": (
-                    "Smaller seal affixed to the back of authenticated documents. Shows "
-                    "the crowned Polish eagle quartered with the Jagiellonian cross, "
-                    "serving as a verification device alongside the main seal."
-                ),
+                "description": "",
             },
         ],
     },
@@ -297,13 +259,7 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Dynastic Seal of Vladimir Olgerdovich",
-                "description": (
-                    "Personal seal used on charters issued from Kyiv. Shows heraldic imagery "
-                    "in the Rurikid-Gediminid tradition — a trident-derived device (trizub) "
-                    "or equestrian figure, reflecting his dual Lithuanian and Ruthenian "
-                    "dynastic identity. Impressions survive attached to documents dating from "
-                    "his Kyiv principality (1362–1394)."
-                ),
+                "description": "",
             },
         ],
     },
@@ -321,28 +277,15 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Great Seal of Vytautas",
-                "description": (
-                    "Large equestrian seal — the most famous of Vytautas's seals — showing "
-                    "a fully armored knight on horseback with sword raised and a shield "
-                    "bearing the double cross (Jagiellonian cross). The Vytis became "
-                    "the enduring symbol of the Grand Duchy under his reign."
-                ),
+                "description": "",
             },
             {
                 "name": "Seal with Columns of Gediminas (Gediminaičiai Pillars)",
-                "description": (
-                    "A seal featuring the dynastic Columns of Gediminas (three horizontal "
-                    "bars), the ancestral emblem of the Gediminid house. Used alongside "
-                    "the equestrian seal to emphasize dynastic legitimacy."
-                ),
+                "description": "",
             },
             {
                 "name": "Counter-seal",
-                "description": (
-                    "Smaller reverse seal affixed to authenticated charters. Known examples "
-                    "from 1407, 1413, and 1420 survive in Lithuanian, Polish, and German "
-                    "archives, showing varied heraldic arrangements."
-                ),
+                "description": "",
             },
         ],
     },
@@ -360,13 +303,7 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Ducal Seal of Skirgaila",
-                "description": (
-                    "Equestrian seal used during his regency (1386–1392) as Grand Duke's "
-                    "lieutenant in Lithuania. Shows an armored rider — a variant of the "
-                    "Vytis — asserting his authority in the Grand Duchy while "
-                    "Jogaila reigned in Kraków. Also appears on charters issued as Prince "
-                    "of Kyiv (1394–1397)."
-                ),
+                "description": "",
             },
         ],
     },
@@ -383,26 +320,15 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius Regni Poloniae)",
-                "description": (
-                    "Majesty seal depicting the enthroned king holding scepter and orb, "
-                    "flanked by the Polish white eagle and Lithuanian Vytis. One of the "
-                    "largest and most elaborate seals of the Jagiellonian era."
-                ),
+                "description": "",
             },
             {
                 "name": "Lithuanian Grand Ducal Equestrian Seal",
-                "description": (
-                    "Shows the Vytis horseman with the double Jagiellonian cross on "
-                    "the shield. Used on documents issued for the Grand Duchy of Lithuania "
-                    "separately from the Polish royal seal."
-                ),
+                "description": "",
             },
             {
                 "name": "Sigillum Secretum (Privy Seal)",
-                "description": (
-                    "Smaller personal seal used on confidential correspondence and private "
-                    "grants. Features the crowned Jagiellonian cross monogram."
-                ),
+                "description": "",
             },
         ],
     },
@@ -418,26 +344,15 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Great Royal Seal of Poland",
-                "description": (
-                    "Enthroned majesty seal with the king holding scepter and orb. "
-                    "Combined Polish eagle and Lithuanian Vytis in the heraldic field. "
-                    "Legend: ALEXANDRI DEI GRACIA REGIS POLONIE MAGNIQUE DUCIS LITTWANIE."
-                ),
+                "description": "",
             },
             {
                 "name": "Lithuanian Grand Ducal Seal (Vytis with Double Cross)",
-                "description": (
-                    "Equestrian seal showing the Vytis horseman bearing the double "
-                    "Jagiellonian cross. Issued for Lithuanian affairs separately from "
-                    "the Polish crown seal."
-                ),
+                "description": "",
             },
             {
                 "name": "Privy Seal",
-                "description": (
-                    "Smaller signet seal used for private correspondence, featuring the "
-                    "crowned letter A monogram."
-                ),
+                "description": "",
             },
         ],
     },
@@ -453,28 +368,15 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
-                "description": (
-                    "Elaborate double-sided majesty seal. Obverse: enthroned king in full "
-                    "regalia with Polish eagle shield. Reverse (counter-seal): the crowned "
-                    "Lithuanian Vytis. The earliest examples show Renaissance-style "
-                    "architectural framing, reflecting his patronage of the arts."
-                ),
+                "description": "",
             },
             {
                 "name": "Grand Ducal Seal of Lithuania",
-                "description": (
-                    "Vytis seal used specifically for Lithuanian affairs. "
-                    "The double Jagiellonian cross appears on the horseman's shield; "
-                    "the Columns of Gediminas are present in the border."
-                ),
+                "description": "",
             },
             {
                 "name": "Sigillum Secretum (Secret Seal)",
-                "description": (
-                    "Personal privy seal bearing the crowned SIGISMVNDVS monogram, "
-                    "used for private royal correspondence and warrants not requiring "
-                    "the full majesty seal."
-                ),
+                "description": "",
             },
         ],
     },
@@ -490,36 +392,19 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Great Royal Seal (Sigillum Maius Regni Poloniae)",
-                "description": (
-                    "Imposing majesty seal showing the enthroned king in full royal regalia. "
-                    "The field shows the combined arms of Poland and Lithuania; Latin legend "
-                    "names him King of Poland and Grand Duke of Lithuania, Russia, Prussia, "
-                    "Masovia, Samogitia, Livonia, etc."
-                ),
+                "description": "",
             },
             {
                 "name": "Lithuanian Grand Ducal Seal with SA Monogram",
-                "description": (
-                    "Vytis seal bearing the double Jagiellonian cross. "
-                    "Uniquely features the crowned SA (Sigismundus Augustus) monogram "
-                    "in the field, making it personally identifiable among Jagiellonian seals."
-                ),
+                "description": "",
             },
             {
                 "name": "Polish Crown Seal with Eagle",
-                "description": (
-                    "Shows the Polish white eagle with the Jagiellonian cross on its chest, "
-                    "used for matters of the Crown of Poland after the creation of the "
-                    "Polish-Lithuanian Commonwealth in 1569."
-                ),
+                "description": "",
             },
             {
                 "name": "Privy Seal (Sigillum Secretum)",
-                "description": (
-                    "Crowned SA monogram seal used for private grants and correspondence. "
-                    "Several variants exist from different periods of his reign, "
-                    "some incorporating Renaissance ornamental borders."
-                ),
+                "description": "",
             },
         ],
     },
@@ -535,29 +420,15 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Great Royal Seal of Poland",
-                "description": (
-                    "Majesty seal showing the enthroned king holding sword and orb. "
-                    "The heraldic field combines the arms of Poland (white eagle), "
-                    "Lithuania (Vytis), and the Báthory family device (three wolf teeth "
-                    "arranged in a diagonal band). Latin legend names him King of Poland, "
-                    "Grand Duke of Lithuania, and Prince of Transylvania."
-                ),
+                "description": "",
             },
             {
                 "name": "Lithuanian Grand Ducal Seal (Vytis with Báthory Arms)",
-                "description": (
-                    "Vytis seal. The Báthory three-wolf-teeth coat of arms "
-                    "appears in the corner of the field, integrating Transylvanian heraldry "
-                    "into the traditional Lithuanian seal imagery."
-                ),
+                "description": "",
             },
             {
                 "name": "Privy Seal with Báthory Arms",
-                "description": (
-                    "Personal seal bearing the Báthory family arms — three wolf teeth "
-                    "(or dragon teeth) on a diagonal band — surmounted by a royal crown. "
-                    "Used for private royal correspondence."
-                ),
+                "description": "",
             },
         ],
     },
@@ -573,36 +444,19 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
-                "description": (
-                    "Majesty seal depicting the enthroned king in full armor and regalia, "
-                    "holding orb and scepter. The quartered shield bears the arms of Poland, "
-                    "Lithuania, Sweden (three crowns), and the Vasa sheaf. One of the most "
-                    "elaborate royal seals of the Commonwealth era."
-                ),
+                "description": "",
             },
             {
                 "name": "Grand Ducal Seal of Lithuania",
-                "description": (
-                    "Vytis seal with the Vasa sheaf added to the heraldic "
-                    "field alongside the traditional double cross. Issued separately for "
-                    "acts concerning the Grand Duchy of Lithuania."
-                ),
+                "description": "",
             },
             {
                 "name": "Equestrian Seal (Cavalier Seal)",
-                "description": (
-                    "Shows the king himself on horseback in full armor — a personal "
-                    "equestrian seal distinct from the Vytis. Used on military "
-                    "commissions and grants to the army."
-                ),
+                "description": "",
             },
             {
                 "name": "Sigillum Secretum (Privy Seal)",
-                "description": (
-                    "Smaller seal with the crowned Vasa sheaf and monogram SIG III. "
-                    "Used for private correspondence and documents not requiring the "
-                    "full majesty seal."
-                ),
+                "description": "",
             },
         ],
     },
@@ -620,26 +474,15 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
-                "description": (
-                    "Majesty seal showing the enthroned king in ceremonial robes holding "
-                    "scepter and orb. The quartered shield includes Poland, Lithuania, "
-                    "Sweden (three crowns), and the Vasa sheaf. He also maintained a claim "
-                    "to Russia, reflected in some variants of the legend."
-                ),
+                "description": "",
             },
             {
                 "name": "Grand Ducal Seal of Lithuania",
-                "description": (
-                    "Vytis seal with Vasa dynastic elements. Issued for "
-                    "matters of the Grand Duchy separately from the Polish crown seal."
-                ),
+                "description": "",
             },
             {
                 "name": "Privy Seal (Sigillum Secretum)",
-                "description": (
-                    "Personal seal with crowned Vasa sheaf and WLAD IV monogram, "
-                    "used on private grants, letters patent, and correspondence."
-                ),
+                "description": "",
             },
         ],
     },
@@ -655,28 +498,15 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
-                "description": (
-                    "Majesty seal depicting the enthroned king with scepter and orb. "
-                    "The quartered arms show Poland, Lithuania, Sweden (three crowns), "
-                    "and the Vasa sheaf. 'The Deluge' years meant multiple seal matrices "
-                    "were lost or damaged; replacement seal dies were cut during the reign."
-                ),
+                "description": "",
             },
             {
                 "name": "Lithuanian Grand Ducal Seal",
-                "description": (
-                    "Vytis seal with Vasa sheaf in the field. "
-                    "As with all Commonwealth rulers, Lithuanian acts were sealed "
-                    "separately from Polish crown documents."
-                ),
+                "description": "",
             },
             {
                 "name": "Privy Seal (Sigillum Secretum)",
-                "description": (
-                    "Small personal seal with the crowned Vasa sheaf and IAN KAZ monogram. "
-                    "He abdicated in 1668 and retired to France, where he spent the "
-                    "remainder of his life."
-                ),
+                "description": "",
             },
         ],
     },
@@ -700,20 +530,11 @@ RULER_DATA = {
         "seals": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
-                "description": (
-                    "Majesty seal showing the enthroned king in full regalia. The quartered "
-                    "shield combines the arms of Poland (white eagle), Lithuania (Vytis), "
-                    "and Saxony (the crossed swords of the Electorate). Latin legend names him "
-                    "King of Poland, Grand Duke of Lithuania, and Elector of Saxony."
-                ),
+                "description": "",
             },
             {
                 "name": "Electoral Seal of Saxony",
-                "description": (
-                    "Saxon electoral seal bearing the crossed swords device and the electoral "
-                    "bonnet, used for acts concerning the Electorate of Saxony. Often employed "
-                    "alongside the Polish royal seal on documents of dual relevance."
-                ),
+                "description": "",
             },
         ],
     },
