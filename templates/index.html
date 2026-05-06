@@ -24,7 +24,7 @@
 <!-- ── Ruler exposition ──────────────────────────────────────────────────── -->
 <section class="rulers-exposition">
   <div class="rulers-expo-header">
-    <h2 class="rulers-expo-title">Rulers of the Grand Duchy of Lithuania</h2>
+    <h2 class="rulers-expo-title">Coin Issuer</h2>
   </div>
   <div class="rulers-strip" id="rulers-strip">
     {% for ruler_name, rdata in ruler_data.items() %}
@@ -95,7 +95,7 @@
     <div class="search-row">
       <div class="search-wrap">
         <input type="search" name="q" value="{{ query }}"
-               placeholder="Search rulers, denominations, descriptions…"
+               placeholder="Search issuers, denominations, descriptions…"
                class="input-search" autocomplete="off">
         <button type="submit" class="btn-search">Search</button>
       </div>
@@ -106,7 +106,7 @@
 
     <div class="filter-row">
       <select name="ruler" class="filter-select" onchange="this.form.submit()">
-        <option value="">All rulers</option>
+        <option value="">All issuers</option>
         {% for r in filters.rulers %}
           <option value="{{ r }}" {% if r == selected_ruler %}selected{% endif %}>{{ r }}</option>
         {% endfor %}
@@ -145,7 +145,7 @@
   <div class="sort-row">
     <label class="sort-label">Sort by:</label>
     {% set sort_fields = [
-      ('ruler',          'Ruler / Period'),
+      ('ruler',          'Issuer / Period'),
       ('updated_at',     'Last modified'),
       ('created_at',     'Date added'),
       ('denomination',   'Denomination'),

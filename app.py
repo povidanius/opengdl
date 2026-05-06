@@ -1008,7 +1008,7 @@ def uploaded_file(filename):
 @app.route("/ruler/<path:ruler_name>/edit", methods=["GET", "POST"])
 def ruler_edit(ruler_name):
     if ruler_name not in RULER_DATA:
-        flash("Ruler not found.", "error")
+        flash("Issuer not found.", "error")
         return redirect(url_for("index"))
 
     if request.method == "POST":
@@ -1036,7 +1036,7 @@ def ruler_edit(ruler_name):
 @app.route("/ruler/<path:ruler_name>/seal/add", methods=["POST"])
 def ruler_seal_add(ruler_name):
     if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Ruler not found"}), 404
+        return jsonify({"error": "Issuer not found"}), 404
     name = request.form.get("name", "").strip()
     if not name:
         return jsonify({"error": "Name required"}), 400
@@ -1047,7 +1047,7 @@ def ruler_seal_add(ruler_name):
 @app.route("/ruler/<path:ruler_name>/seal/<int:seal_idx>/rename", methods=["POST"])
 def ruler_seal_rename(ruler_name, seal_idx):
     if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Ruler not found"}), 404
+        return jsonify({"error": "Issuer not found"}), 404
     name = request.form.get("name", "").strip()
     if not name:
         return jsonify({"error": "Name required"}), 400
@@ -1059,7 +1059,7 @@ def ruler_seal_rename(ruler_name, seal_idx):
 @app.route("/ruler/<path:ruler_name>/seal/<int:seal_idx>/upload", methods=["POST"])
 def ruler_seal_upload(ruler_name, seal_idx):
     if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Ruler not found"}), 404
+        return jsonify({"error": "Issuer not found"}), 404
     seals = models.get_ruler_seals(ruler_name)
     if seal_idx < 0 or seal_idx >= len(seals):
         return jsonify({"error": "Seal index out of range"}), 400
@@ -1085,7 +1085,7 @@ def ruler_seal_upload(ruler_name, seal_idx):
 @app.route("/ruler/<path:ruler_name>/seal/<int:seal_idx>/delete_image", methods=["POST"])
 def ruler_seal_delete_image(ruler_name, seal_idx):
     if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Ruler not found"}), 404
+        return jsonify({"error": "Issuer not found"}), 404
     old = models.remove_ruler_seal_image_db(ruler_name, seal_idx)
     if old:
         old_path = SEALS_FOLDER / old
@@ -1097,7 +1097,7 @@ def ruler_seal_delete_image(ruler_name, seal_idx):
 @app.route("/ruler/<path:ruler_name>/seal/<int:seal_idx>/delete", methods=["POST"])
 def ruler_seal_delete(ruler_name, seal_idx):
     if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Ruler not found"}), 404
+        return jsonify({"error": "Issuer not found"}), 404
     old_image = models.delete_ruler_seal(ruler_name, seal_idx)
     if old_image:
         old_path = SEALS_FOLDER / old_image
@@ -1111,7 +1111,7 @@ def ruler_seal_delete(ruler_name, seal_idx):
 @app.route("/ruler/<path:ruler_name>/coat/add", methods=["POST"])
 def ruler_coat_add(ruler_name):
     if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Ruler not found"}), 404
+        return jsonify({"error": "Issuer not found"}), 404
     name = request.form.get("name", "").strip()
     if not name:
         return jsonify({"error": "Name required"}), 400
@@ -1122,7 +1122,7 @@ def ruler_coat_add(ruler_name):
 @app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/rename", methods=["POST"])
 def ruler_coat_rename(ruler_name, coat_idx):
     if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Ruler not found"}), 404
+        return jsonify({"error": "Issuer not found"}), 404
     name = request.form.get("name", "").strip()
     if not name:
         return jsonify({"error": "Name required"}), 400
@@ -1134,7 +1134,7 @@ def ruler_coat_rename(ruler_name, coat_idx):
 @app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/upload", methods=["POST"])
 def ruler_coat_upload(ruler_name, coat_idx):
     if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Ruler not found"}), 404
+        return jsonify({"error": "Issuer not found"}), 404
     coats = models.get_ruler_coats(ruler_name)
     if coat_idx < 0 or coat_idx >= len(coats):
         return jsonify({"error": "Index out of range"}), 400
@@ -1160,7 +1160,7 @@ def ruler_coat_upload(ruler_name, coat_idx):
 @app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/delete_image", methods=["POST"])
 def ruler_coat_delete_image(ruler_name, coat_idx):
     if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Ruler not found"}), 404
+        return jsonify({"error": "Issuer not found"}), 404
     old = models.remove_ruler_coat_image_db(ruler_name, coat_idx)
     if old:
         old_path = COATS_FOLDER / old
@@ -1172,7 +1172,7 @@ def ruler_coat_delete_image(ruler_name, coat_idx):
 @app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/delete", methods=["POST"])
 def ruler_coat_delete(ruler_name, coat_idx):
     if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Ruler not found"}), 404
+        return jsonify({"error": "Issuer not found"}), 404
     old_image = models.delete_ruler_coat(ruler_name, coat_idx)
     if old_image:
         old_path = COATS_FOLDER / old_image
