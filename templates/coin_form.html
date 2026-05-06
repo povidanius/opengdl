@@ -296,5 +296,55 @@ function toggleSaleFields() {
   const fields = document.getElementById('sale-fields');
   fields.style.display = cb.checked ? '' : 'none';
 }
+
+// ── Dynamic denominations based on ruler ──────────────────────────────────
+(function initRulerDenominations() {
+  var rulerInput = document.getElementById('ruler');
+  var denomList = document.getElementById('denom-list');
+  if (!rulerInput || !denomList) return;
+
+  var defaultDenoms = [
+    "Obol", "Denar", "Double Denar", "Schilling (Szeląg)",
+    "Half-Grosz (Półgrosz)", "Grosz",
+    "Trojak (3 Grosze)", "Czworak (4 Grosze)", "Szóstak (6 Groszy)",
+    "Ort (Quarter Thaler)", "Półtalar (Half Thaler)", "Talar",
+    "Ducat"
+  ];
+
+  var firstRepublicDenoms = [
+    "1 centas", "2 centai", "5 centai", "10 centų", "20 centų", "50 centų",
+    "1 litas", "2 litai", "5 litai", "10 litų"
+  ];
+
+  var secondRepublicDenoms = [
+    "1 centas", "2 centai", "5 centai", "10 centų", "20 centų", "50 centų",
+    "1 litas", "2 litai", "5 litai",
+    "1 euro cent", "2 euro cents", "5 euro cents", "10 euro cents",
+    "20 euro cents", "50 euro cents",
+    "1 euro", "2 euros"
+  ];
+
+  function updateDenominations() {
+    var ruler = rulerInput.value.trim();
+    var denoms;
+    if (ruler === "Lietuvos Respublika (1918\u20131940)") {
+      denoms = firstRepublicDenoms;
+    } else if (ruler === "Lietuvos Respublika (from 1990)") {
+      denoms = secondRepublicDenoms;
+    } else {
+      denoms = defaultDenoms;
+    }
+    denomList.innerHTML = '';
+    for (var i = 0; i < denoms.length; i++) {
+      var opt = document.createElement('option');
+      opt.value = denoms[i];
+      denomList.appendChild(opt);
+    }
+  }
+
+  rulerInput.addEventListener('input', updateDenominations);
+  rulerInput.addEventListener('change', updateDenominations);
+  updateDenominations();
+})();
 </script>
 {% endblock %}
