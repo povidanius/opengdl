@@ -102,146 +102,72 @@ def update_ruler_notes(ruler_name: str, notes: str) -> None:
     _save(data)
 
 
-def get_ruler_seals(ruler_name: str) -> list:
-    """Return list of {name, image?} dicts for a ruler."""
+def get_ruler_graphics(ruler_name: str) -> list:
+    """Return list of {name, image?} dicts for a ruler's graphical materials."""
     data = _load()
-    return data.get("rulers", {}).get(ruler_name, {}).get("seals", [])
+    return data.get("rulers", {}).get(ruler_name, {}).get("graphical_materials", [])
 
 
-def set_ruler_seals(ruler_name: str, seals: list) -> None:
-    data = _load()
-    data.setdefault("rulers", {})
-    data["rulers"].setdefault(ruler_name, {})
-    data["rulers"][ruler_name]["seals"] = seals
-    _save(data)
-
-
-def add_ruler_seal(ruler_name: str, name: str) -> int:
-    """Append a new seal entry; returns its index."""
+def set_ruler_graphics(ruler_name: str, items: list) -> None:
     data = _load()
     data.setdefault("rulers", {})
     data["rulers"].setdefault(ruler_name, {})
-    seals = data["rulers"][ruler_name].setdefault("seals", [])
-    seals.append({"name": name})
+    data["rulers"][ruler_name]["graphical_materials"] = items
     _save(data)
-    return len(seals) - 1
 
 
-def rename_ruler_seal(ruler_name: str, idx: int, name: str) -> bool:
+def add_ruler_graphic(ruler_name: str, name: str) -> int:
+    """Append a new graphical material entry; returns its index."""
     data = _load()
-    seals = data.get("rulers", {}).get(ruler_name, {}).get("seals", [])
-    if idx < 0 or idx >= len(seals):
+    data.setdefault("rulers", {})
+    data["rulers"].setdefault(ruler_name, {})
+    items = data["rulers"][ruler_name].setdefault("graphical_materials", [])
+    items.append({"name": name})
+    _save(data)
+    return len(items) - 1
+
+
+def rename_ruler_graphic(ruler_name: str, idx: int, name: str) -> bool:
+    data = _load()
+    items = data.get("rulers", {}).get(ruler_name, {}).get("graphical_materials", [])
+    if idx < 0 or idx >= len(items):
         return False
-    seals[idx]["name"] = name
+    items[idx]["name"] = name
     _save(data)
     return True
 
 
-def set_ruler_seal_image_db(ruler_name: str, idx: int, filename: str) -> Optional[str]:
-    """Set image for a seal; returns old filename if any."""
+def set_ruler_graphic_image_db(ruler_name: str, idx: int, filename: str) -> Optional[str]:
+    """Set image for a graphical material; returns old filename if any."""
     data = _load()
-    seals = data.get("rulers", {}).get(ruler_name, {}).get("seals", [])
-    if idx < 0 or idx >= len(seals):
+    items = data.get("rulers", {}).get(ruler_name, {}).get("graphical_materials", [])
+    if idx < 0 or idx >= len(items):
         return None
-    old = seals[idx].get("image")
-    seals[idx]["image"] = filename
+    old = items[idx].get("image")
+    items[idx]["image"] = filename
     _save(data)
     return old
 
 
-def remove_ruler_seal_image_db(ruler_name: str, idx: int) -> Optional[str]:
-    """Remove image from a seal; returns old filename if any."""
+def remove_ruler_graphic_image_db(ruler_name: str, idx: int) -> Optional[str]:
+    """Remove image from a graphical material; returns old filename if any."""
     data = _load()
-    seals = data.get("rulers", {}).get(ruler_name, {}).get("seals", [])
-    if idx < 0 or idx >= len(seals):
+    items = data.get("rulers", {}).get(ruler_name, {}).get("graphical_materials", [])
+    if idx < 0 or idx >= len(items):
         return None
-    old = seals[idx].pop("image", None)
+    old = items[idx].pop("image", None)
     if old is not None:
         _save(data)
     return old
 
 
-def delete_ruler_seal(ruler_name: str, idx: int) -> Optional[str]:
-    """Delete a seal entry entirely; returns its image filename if any."""
+def delete_ruler_graphic(ruler_name: str, idx: int) -> Optional[str]:
+    """Delete a graphical material entry entirely; returns its image filename if any."""
     data = _load()
-    seals = data.get("rulers", {}).get(ruler_name, {}).get("seals", [])
-    if idx < 0 or idx >= len(seals):
+    items = data.get("rulers", {}).get(ruler_name, {}).get("graphical_materials", [])
+    if idx < 0 or idx >= len(items):
         return None
-    old_image = seals.pop(idx).get("image")
-    _save(data)
-    return old_image
-
-
-# ---------------------------------------------------------------------------
-# Coat of Arms CRUD (same structure as seals)
-# ---------------------------------------------------------------------------
-
-def get_ruler_coats(ruler_name: str) -> list:
-    """Return list of {name, image?} dicts for a ruler's coats of arms."""
-    data = _load()
-    return data.get("rulers", {}).get(ruler_name, {}).get("coats_of_arms", [])
-
-
-def set_ruler_coats(ruler_name: str, coats: list) -> None:
-    data = _load()
-    data.setdefault("rulers", {})
-    data["rulers"].setdefault(ruler_name, {})
-    data["rulers"][ruler_name]["coats_of_arms"] = coats
-    _save(data)
-
-
-def add_ruler_coat(ruler_name: str, name: str) -> int:
-    """Append a new coat of arms entry; returns its index."""
-    data = _load()
-    data.setdefault("rulers", {})
-    data["rulers"].setdefault(ruler_name, {})
-    coats = data["rulers"][ruler_name].setdefault("coats_of_arms", [])
-    coats.append({"name": name})
-    _save(data)
-    return len(coats) - 1
-
-
-def rename_ruler_coat(ruler_name: str, idx: int, name: str) -> bool:
-    data = _load()
-    coats = data.get("rulers", {}).get(ruler_name, {}).get("coats_of_arms", [])
-    if idx < 0 or idx >= len(coats):
-        return False
-    coats[idx]["name"] = name
-    _save(data)
-    return True
-
-
-def set_ruler_coat_image_db(ruler_name: str, idx: int, filename: str) -> Optional[str]:
-    """Set image for a coat of arms; returns old filename if any."""
-    data = _load()
-    coats = data.get("rulers", {}).get(ruler_name, {}).get("coats_of_arms", [])
-    if idx < 0 or idx >= len(coats):
-        return None
-    old = coats[idx].get("image")
-    coats[idx]["image"] = filename
-    _save(data)
-    return old
-
-
-def remove_ruler_coat_image_db(ruler_name: str, idx: int) -> Optional[str]:
-    """Remove image from a coat of arms; returns old filename if any."""
-    data = _load()
-    coats = data.get("rulers", {}).get(ruler_name, {}).get("coats_of_arms", [])
-    if idx < 0 or idx >= len(coats):
-        return None
-    old = coats[idx].pop("image", None)
-    if old is not None:
-        _save(data)
-    return old
-
-
-def delete_ruler_coat(ruler_name: str, idx: int) -> Optional[str]:
-    """Delete a coat of arms entry entirely; returns its image filename if any."""
-    data = _load()
-    coats = data.get("rulers", {}).get(ruler_name, {}).get("coats_of_arms", [])
-    if idx < 0 or idx >= len(coats):
-        return None
-    old_image = coats.pop(idx).get("image")
+    old_image = items.pop(idx).get("image")
     _save(data)
     return old_image
 

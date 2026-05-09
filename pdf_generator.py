@@ -22,8 +22,7 @@ from reportlab.platypus.flowables import BalancedColumns
 
 UPLOAD_FOLDER   = Path(__file__).parent / "uploads"
 PORTRAITS_FOLDER = Path(__file__).parent / "static" / "portraits"
-SEALS_FOLDER    = Path(__file__).parent / "static" / "seals"
-COATS_FOLDER    = Path(__file__).parent / "static" / "coats_of_arms"
+GRAPHICS_FOLDER = Path(__file__).parent / "static" / "graphical_materials"
 
 # ── Unicode font registration ─────────────────────────────────────────────────
 _DEJAVU_DIR = Path("/usr/share/fonts/truetype/dejavu")
@@ -107,13 +106,13 @@ def _build_styles():
         fontSize=8.5, leading=12, textColor=GREY,
         fontName="DejaVuSans-Oblique",
     )
-    styles["seals_label"] = ParagraphStyle(
-        "SealsLabel",
+    styles["graphics_label"] = ParagraphStyle(
+        "GraphicsLabel",
         fontSize=7, leading=9, textColor=GOLD,
         fontName="DejaVuSans-Bold", spaceAfter=2,
     )
-    styles["seal_name"] = ParagraphStyle(
-        "SealName",
+    styles["graphic_name"] = ParagraphStyle(
+        "GraphicName",
         fontSize=6.5, leading=8, textColor=GREY,
         fontName="DejaVuSans", alignment=TA_CENTER,
     )
@@ -262,13 +261,13 @@ def _ruler_block(ruler_name, ruler_info, styles, doc_width):
 
     elements.append(frame_tbl)
 
-    # Seals strip (images with captions, shown below the ruler frame)
-    seals = ruler_info.get("seals", [])
-    seal_pairs = []
-    for s in seals:
-        if not s.get("image"):
+    # Graphical materials strip (images with captions, shown below the ruler frame)
+    gfx_items = ruler_info.get("graphical_materials", [])
+    gfx_pairs = []
+    for g in gfx_items:
+        if not g.get("image"):
             continue
-        img_path = SEALS_FOLDER / s["image"]
+        img_path = GRAPHICS_FOLDER / g["image"]
         if not img_path.exists():
             continue
         try:
@@ -278,18 +277,18 @@ def _ruler_block(ruler_name, ruler_info, styles, doc_width):
             ratio = min(max_side / iw, max_side / ih)
             img.drawWidth  = iw * ratio
             img.drawHeight = ih * ratio
-            seal_pairs.append((img, s["name"]))
+            gfx_pairs.append((img, g["name"]))
         except Exception:
             pass
 
-    if seal_pairs:
+    if gfx_pairs:
         elements.append(Spacer(1, 1.5*mm))
-        elements.append(Paragraph("Known Seals", styles["seals_label"]))
-        n = len(seal_pairs)
+        elements.append(Paragraph("Graphical Material", styles["graphics_label"]))
+        n = len(gfx_pairs)
         cell_w = min(2.5 * cm, doc_width / n)
-        cells = [[p[0] for p in seal_pairs], [Paragraph(p[1], styles["seal_name"]) for p in seal_pairs]]
-        seal_tbl = Table(cells, colWidths=[cell_w] * n)
-        seal_tbl.setStyle(TableStyle([
+        cells = [[p[0] for p in gfx_pairs], [Paragraph(p[1], styles["graphic_name"]) for p in gfx_pairs]]
+        gfx_tbl = Table(cells, colWidths=[cell_w] * n)
+        gfx_tbl.setStyle(TableStyle([
             ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
             ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
             ("LEFTPADDING",   (0, 0), (-1, -1), 2),
@@ -297,44 +296,7 @@ def _ruler_block(ruler_name, ruler_info, styles, doc_width):
             ("TOPPADDING",    (0, 0), (-1, -1), 1),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
         ]))
-        elements.append(seal_tbl)
-
-    # Coat of Arms strip (same layout as seals)
-    coats = ruler_info.get("coats_of_arms", [])
-    coat_pairs = []
-    for c in coats:
-        if not c.get("image"):
-            continue
-        img_path = COATS_FOLDER / c["image"]
-        if not img_path.exists():
-            continue
-        try:
-            img = Image(str(img_path))
-            iw, ih = img.imageWidth, img.imageHeight
-            max_side = 2.0 * cm
-            ratio = min(max_side / iw, max_side / ih)
-            img.drawWidth  = iw * ratio
-            img.drawHeight = ih * ratio
-            coat_pairs.append((img, c["name"]))
-        except Exception:
-            pass
-
-    if coat_pairs:
-        elements.append(Spacer(1, 1.5*mm))
-        elements.append(Paragraph("Coat of Arms", styles["seals_label"]))
-        n = len(coat_pairs)
-        cell_w = min(2.5 * cm, doc_width / n)
-        cells = [[p[0] for p in coat_pairs], [Paragraph(p[1], styles["seal_name"]) for p in coat_pairs]]
-        coat_tbl = Table(cells, colWidths=[cell_w] * n)
-        coat_tbl.setStyle(TableStyle([
-            ("ALIGN",         (0, 0), (-1, -1), "CENTER"),
-            ("VALIGN",        (0, 0), (-1, -1), "MIDDLE"),
-            ("LEFTPADDING",   (0, 0), (-1, -1), 2),
-            ("RIGHTPADDING",  (0, 0), (-1, -1), 2),
-            ("TOPPADDING",    (0, 0), (-1, -1), 1),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 1),
-        ]))
-        elements.append(coat_tbl)
+        elements.append(gfx_tbl)
 
     elements.append(Spacer(1, 5*mm))
     return elements

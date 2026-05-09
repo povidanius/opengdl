@@ -65,29 +65,16 @@
     </div>
   </form>
 
-  <!-- Coat of Arms -->
+  <!-- Graphical Material -->
   <div class="re-seals-section">
     <div class="re-seals-header">
-      <span class="re-seals-title">Coat of Arms</span>
-      <span class="field-hint">Coat of arms images and titles appear in PDF exports.</span>
+      <span class="re-seals-title">Graphical Material (e.g., Coats of Arms, seals, related documents)</span>
+      <span class="field-hint">Images and titles appear in PDF exports.</span>
     </div>
-    <div class="ruler-seals-grid" id="coats-grid"></div>
+    <div class="ruler-seals-grid" id="gfx-grid"></div>
     <div class="seal-add-area">
-      <input class="seal-add-input" id="new-coat-name" type="text" placeholder="New coat of arms name…">
-      <button class="btn-seal-add" id="btn-add-coat">+ Add Coat of Arms</button>
-    </div>
-  </div>
-
-  <!-- Seals -->
-  <div class="re-seals-section">
-    <div class="re-seals-header">
-      <span class="re-seals-title">Known Seals</span>
-      <span class="field-hint">Seal images and titles appear in the issuer strip and in PDF exports.</span>
-    </div>
-    <div class="ruler-seals-grid" id="seals-grid"></div>
-    <div class="seal-add-area">
-      <input class="seal-add-input" id="new-seal-name" type="text" placeholder="New seal name…">
-      <button class="btn-seal-add" id="btn-add-seal">+ Add Seal</button>
+      <input class="seal-add-input" id="new-gfx-name" type="text" placeholder="New item name…">
+      <button class="btn-seal-add" id="btn-add-gfx">+ Add Item</button>
     </div>
   </div>
 
@@ -96,31 +83,31 @@
 <script>
 (function() {
   var RULER = {{ ruler_name | tojson }};
-  var SEALS = {{ seals | tojson }};
+  var ITEMS = {{ graphical_materials | tojson }};
 
   function escH(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function renderGrid() {
-    var grid = document.getElementById('seals-grid');
+    var grid = document.getElementById('gfx-grid');
     if (!grid) return;
-    if (!SEALS.length) { grid.innerHTML = '<p class="field-hint" style="padding:.5rem 0">No seals added yet.</p>'; return; }
+    if (!ITEMS.length) { grid.innerHTML = '<p class="field-hint" style="padding:.5rem 0">No graphical materials added yet.</p>'; return; }
     var html = '';
-    SEALS.forEach(function(s, i) {
-      var imgSrc = s.image ? '/static/seals/' + s.image : '';
+    ITEMS.forEach(function(s, i) {
+      var imgSrc = s.image ? '/static/graphical_materials/' + s.image : '';
       var thumb = imgSrc
         ? '<a href="' + escH(imgSrc) + '" target="_blank" class="ruler-seal-thumb-link" title="Open full size">'
           + '<img class="ruler-seal-thumb" src="' + escH(imgSrc) + '" alt="' + escH(s.name) + '" loading="lazy"></a>'
-        : '<div class="ruler-seal-thumb ruler-seal-placeholder">🔏</div>';
+        : '<div class="ruler-seal-thumb ruler-seal-placeholder">&#128247;</div>';
       html += '<div class="ruler-seal-card" data-idx="' + i + '">'
         + thumb
-        + '<input class="seal-name-input" type="text" value="' + escH(s.name) + '" data-idx="' + i + '" placeholder="Seal name">'
+        + '<input class="seal-name-input" type="text" value="' + escH(s.name) + '" data-idx="' + i + '" placeholder="Item name">'
         + '<div class="ruler-seal-card-actions">'
-        + '<label class="btn-seal-upload" title="Upload image">↑ Image'
+        + '<label class="btn-seal-upload" title="Upload image">&#8593; Image'
         + '<input type="file" class="seal-file-input" accept="image/*" style="display:none" data-idx="' + i + '"></label>'
-        + (imgSrc ? '<button class="btn-seal-rmimg" data-idx="' + i + '" title="Remove image">✕ img</button>' : '')
-        + '<button class="btn-seal-rm" data-idx="' + i + '" title="Delete this seal">🗑</button>'
+        + (imgSrc ? '<button class="btn-seal-rmimg" data-idx="' + i + '" title="Remove image">&#10005; img</button>' : '')
+        + '<button class="btn-seal-rm" data-idx="' + i + '" title="Delete this item">&#128465;</button>'
         + '</div></div>';
     });
     grid.innerHTML = html;
@@ -128,45 +115,41 @@
   }
 
   function bindEvents() {
-    var grid = document.getElementById('seals-grid');
+    var grid = document.getElementById('gfx-grid');
 
-    // Rename on blur / Enter
     grid.querySelectorAll('.seal-name-input').forEach(function(inp) {
       inp.addEventListener('blur', function() { saveName(inp); });
       inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } });
     });
 
-    // Upload image
     grid.querySelectorAll('.seal-file-input').forEach(function(input) {
       input.addEventListener('change', function() {
         if (!input.files.length) return;
         var idx = parseInt(input.dataset.idx, 10);
         var fd = new FormData(); fd.append('image', input.files[0]);
-        fetch('/ruler/' + encodeURIComponent(RULER) + '/seal/' + idx + '/upload', { method: 'POST', body: fd })
+        fetch('/ruler/' + encodeURIComponent(RULER) + '/graphic/' + idx + '/upload', { method: 'POST', body: fd })
           .then(function(r) { return r.json(); })
-          .then(function(d) { if (d.filename) { SEALS[idx].image = d.filename; renderGrid(); } })
+          .then(function(d) { if (d.filename) { ITEMS[idx].image = d.filename; renderGrid(); } })
           .catch(function() { alert('Upload failed.'); });
       });
     });
 
-    // Remove image only
     grid.querySelectorAll('.btn-seal-rmimg').forEach(function(btn) {
       btn.addEventListener('click', function() {
         var idx = parseInt(btn.dataset.idx, 10);
-        fetch('/ruler/' + encodeURIComponent(RULER) + '/seal/' + idx + '/delete_image', { method: 'POST' })
+        fetch('/ruler/' + encodeURIComponent(RULER) + '/graphic/' + idx + '/delete_image', { method: 'POST' })
           .then(function(r) { return r.json(); })
-          .then(function() { delete SEALS[idx].image; renderGrid(); });
+          .then(function() { delete ITEMS[idx].image; renderGrid(); });
       });
     });
 
-    // Delete entire seal
     grid.querySelectorAll('.btn-seal-rm').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        if (!confirm('Delete this seal entry?')) return;
+        if (!confirm('Delete this item?')) return;
         var idx = parseInt(btn.dataset.idx, 10);
-        fetch('/ruler/' + encodeURIComponent(RULER) + '/seal/' + idx + '/delete', { method: 'POST' })
+        fetch('/ruler/' + encodeURIComponent(RULER) + '/graphic/' + idx + '/delete', { method: 'POST' })
           .then(function(r) { return r.json(); })
-          .then(function() { SEALS.splice(idx, 1); renderGrid(); });
+          .then(function() { ITEMS.splice(idx, 1); renderGrid(); });
       });
     });
   }
@@ -174,130 +157,28 @@
   function saveName(inp) {
     var idx  = parseInt(inp.dataset.idx, 10);
     var name = inp.value.trim();
-    if (!name) { inp.value = SEALS[idx].name; return; }
-    if (name === SEALS[idx].name) return;
+    if (!name) { inp.value = ITEMS[idx].name; return; }
+    if (name === ITEMS[idx].name) return;
     var fd = new FormData(); fd.append('name', name);
-    fetch('/ruler/' + encodeURIComponent(RULER) + '/seal/' + idx + '/rename', { method: 'POST', body: fd })
+    fetch('/ruler/' + encodeURIComponent(RULER) + '/graphic/' + idx + '/rename', { method: 'POST', body: fd })
       .then(function(r) { return r.json(); })
-      .then(function(d) { if (d.ok) SEALS[idx].name = d.name; });
+      .then(function(d) { if (d.ok) ITEMS[idx].name = d.name; });
   }
 
-  // Add new seal
-  document.getElementById('btn-add-seal').addEventListener('click', function() {
-    var inp  = document.getElementById('new-seal-name');
+  document.getElementById('btn-add-gfx').addEventListener('click', function() {
+    var inp  = document.getElementById('new-gfx-name');
     var name = inp.value.trim();
     if (!name) { inp.focus(); return; }
     var fd = new FormData(); fd.append('name', name);
-    fetch('/ruler/' + encodeURIComponent(RULER) + '/seal/add', { method: 'POST', body: fd })
+    fetch('/ruler/' + encodeURIComponent(RULER) + '/graphic/add', { method: 'POST', body: fd })
       .then(function(r) { return r.json(); })
-      .then(function(d) { if (d.index !== undefined) { SEALS.push({name: d.name}); inp.value = ''; renderGrid(); } });
+      .then(function(d) { if (d.index !== undefined) { ITEMS.push({name: d.name}); inp.value = ''; renderGrid(); } });
   });
-  document.getElementById('new-seal-name').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('btn-add-seal').click(); }
+  document.getElementById('new-gfx-name').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('btn-add-gfx').click(); }
   });
 
   renderGrid();
-})();
-
-// ── Coat of Arms management ─────────────────────────────────────────────────
-(function() {
-  var RULER = {{ ruler_name | tojson }};
-  var COATS = {{ coats_of_arms | tojson }};
-
-  function escH(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function renderCoatsGrid() {
-    var grid = document.getElementById('coats-grid');
-    if (!grid) return;
-    if (!COATS.length) { grid.innerHTML = '<p class="field-hint" style="padding:.5rem 0">No coats of arms added yet.</p>'; return; }
-    var html = '';
-    COATS.forEach(function(s, i) {
-      var imgSrc = s.image ? '/static/coats_of_arms/' + s.image : '';
-      var thumb = imgSrc
-        ? '<a href="' + escH(imgSrc) + '" target="_blank" class="ruler-seal-thumb-link" title="Open full size">'
-          + '<img class="ruler-seal-thumb" src="' + escH(imgSrc) + '" alt="' + escH(s.name) + '" loading="lazy"></a>'
-        : '<div class="ruler-seal-thumb ruler-seal-placeholder">🛡</div>';
-      html += '<div class="ruler-seal-card" data-idx="' + i + '">'
-        + thumb
-        + '<input class="seal-name-input coat-name-input" type="text" value="' + escH(s.name) + '" data-idx="' + i + '" placeholder="Coat of arms name">'
-        + '<div class="ruler-seal-card-actions">'
-        + '<label class="btn-seal-upload" title="Upload image">↑ Image'
-        + '<input type="file" class="coat-file-input" accept="image/*" style="display:none" data-idx="' + i + '"></label>'
-        + (imgSrc ? '<button class="btn-seal-rmimg coat-rmimg" data-idx="' + i + '" title="Remove image">✕ img</button>' : '')
-        + '<button class="btn-seal-rm coat-rm" data-idx="' + i + '" title="Delete this coat of arms">🗑</button>'
-        + '</div></div>';
-    });
-    grid.innerHTML = html;
-    bindCoatEvents();
-  }
-
-  function bindCoatEvents() {
-    var grid = document.getElementById('coats-grid');
-
-    grid.querySelectorAll('.coat-name-input').forEach(function(inp) {
-      inp.addEventListener('blur', function() { saveCoatName(inp); });
-      inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } });
-    });
-
-    grid.querySelectorAll('.coat-file-input').forEach(function(input) {
-      input.addEventListener('change', function() {
-        if (!input.files.length) return;
-        var idx = parseInt(input.dataset.idx, 10);
-        var fd = new FormData(); fd.append('image', input.files[0]);
-        fetch('/ruler/' + encodeURIComponent(RULER) + '/coat/' + idx + '/upload', { method: 'POST', body: fd })
-          .then(function(r) { return r.json(); })
-          .then(function(d) { if (d.filename) { COATS[idx].image = d.filename; renderCoatsGrid(); } })
-          .catch(function() { alert('Upload failed.'); });
-      });
-    });
-
-    grid.querySelectorAll('.coat-rmimg').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var idx = parseInt(btn.dataset.idx, 10);
-        fetch('/ruler/' + encodeURIComponent(RULER) + '/coat/' + idx + '/delete_image', { method: 'POST' })
-          .then(function(r) { return r.json(); })
-          .then(function() { delete COATS[idx].image; renderCoatsGrid(); });
-      });
-    });
-
-    grid.querySelectorAll('.coat-rm').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        if (!confirm('Delete this coat of arms entry?')) return;
-        var idx = parseInt(btn.dataset.idx, 10);
-        fetch('/ruler/' + encodeURIComponent(RULER) + '/coat/' + idx + '/delete', { method: 'POST' })
-          .then(function(r) { return r.json(); })
-          .then(function() { COATS.splice(idx, 1); renderCoatsGrid(); });
-      });
-    });
-  }
-
-  function saveCoatName(inp) {
-    var idx  = parseInt(inp.dataset.idx, 10);
-    var name = inp.value.trim();
-    if (!name) { inp.value = COATS[idx].name; return; }
-    if (name === COATS[idx].name) return;
-    var fd = new FormData(); fd.append('name', name);
-    fetch('/ruler/' + encodeURIComponent(RULER) + '/coat/' + idx + '/rename', { method: 'POST', body: fd })
-      .then(function(r) { return r.json(); })
-      .then(function(d) { if (d.ok) COATS[idx].name = d.name; });
-  }
-
-  document.getElementById('btn-add-coat').addEventListener('click', function() {
-    var inp  = document.getElementById('new-coat-name');
-    var name = inp.value.trim();
-    if (!name) { inp.focus(); return; }
-    var fd = new FormData(); fd.append('name', name);
-    fetch('/ruler/' + encodeURIComponent(RULER) + '/coat/add', { method: 'POST', body: fd })
-      .then(function(r) { return r.json(); })
-      .then(function(d) { if (d.index !== undefined) { COATS.push({name: d.name}); inp.value = ''; renderCoatsGrid(); } });
-  });
-  document.getElementById('new-coat-name').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('btn-add-coat').click(); }
-  });
-
-  renderCoatsGrid();
 })();
 </script>
 {% endblock %}

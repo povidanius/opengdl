@@ -31,10 +31,8 @@ UPLOAD_FOLDER = Path(__file__).parent / "uploads"
 UPLOAD_FOLDER.mkdir(exist_ok=True)
 DOCUMENTS_FOLDER = Path(__file__).parent / "uploads" / "documents"
 DOCUMENTS_FOLDER.mkdir(parents=True, exist_ok=True)
-SEALS_FOLDER = Path(__file__).parent / "static" / "seals"
-SEALS_FOLDER.mkdir(parents=True, exist_ok=True)
-COATS_FOLDER = Path(__file__).parent / "static" / "coats_of_arms"
-COATS_FOLDER.mkdir(parents=True, exist_ok=True)
+GRAPHICS_FOLDER = Path(__file__).parent / "static" / "graphical_materials"
+GRAPHICS_FOLDER.mkdir(parents=True, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "webp", "tif", "tiff"}
 ALLOWED_DOC_EXTENSIONS = {
@@ -74,22 +72,53 @@ def _fix_exif_rotation(fpath: Path) -> None:
         pass
 
 
-def _migrate_seal_storage():
-    """One-time migration: populate rulers[name].seals list from RULER_DATA + old seal_images."""
+def _migrate_graphical_materials():
+    """One-time migration: populate rulers[name].graphical_materials from old keys."""
+    import shutil
+    old_seals_dir = Path(__file__).parent / "static" / "seals"
+    old_coats_dir = Path(__file__).parent / "static" / "coats_of_arms"
+
     db_rulers = models.get_rulers()
     for rname, rdata in RULER_DATA.items():
         ruler_db = db_rulers.get(rname, {})
-        if "seals" not in ruler_db:
-            static_seals = rdata.get("seals", [])
+        if "graphical_materials" in ruler_db:
+            continue  # already migrated
+
+        items = []
+        # Migrate from old "seals" DB key
+        if "seals" in ruler_db:
+            for s in ruler_db["seals"]:
+                entry = {"name": s["name"]}
+                if s.get("image"):
+                    old_path = old_seals_dir / s["image"]
+                    if old_path.exists():
+                        new_path = GRAPHICS_FOLDER / s["image"]
+                        shutil.move(str(old_path), str(new_path))
+                    entry["image"] = s["image"]
+                items.append(entry)
+        else:
+            # First-time init from RULER_DATA static defaults
+            static_items = rdata.get("graphical_materials", [])
             old_images = ruler_db.get("seal_images", {})
-            seals = []
-            for i, s in enumerate(static_seals):
+            for i, s in enumerate(static_items):
                 entry = {"name": s["name"]}
                 img = old_images.get(str(i))
                 if img:
                     entry["image"] = img
-                seals.append(entry)
-            models.set_ruler_seals(rname, seals)
+                items.append(entry)
+
+        # Migrate from old "coats_of_arms" DB key
+        for c in ruler_db.get("coats_of_arms", []):
+            entry = {"name": c["name"]}
+            if c.get("image"):
+                old_path = old_coats_dir / c["image"]
+                if old_path.exists():
+                    new_path = GRAPHICS_FOLDER / c["image"]
+                    shutil.move(str(old_path), str(new_path))
+                entry["image"] = c["image"]
+            items.append(entry)
+
+        models.set_ruler_graphics(rname, items)
 
 
 def _prefill_options():
@@ -153,7 +182,7 @@ RULER_DATA = {
         "bio": (
             "Mindaugas, crowned King of Lithuania in 1253, is traditionally regarded as the ruler who united the Lithuanian lands. His reign marks an important stage in the formation of Lithuanian statehood and its contacts with medieval Europe. No currently known coins can be securely attributed to Mindaugas, but Lithuania’s early monetary tradition is represented by silver ingot money — the Lithuanian “longs” (ilgieji, or kapos)"
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Royal Seal of Mindaugas (c. 1253–1263)",
                 "description": "",
@@ -170,11 +199,10 @@ RULER_DATA = {
             "Grand Duke of Lithuania and founder of the Gediminid dynasty that would rule "
             "for over two centuries. Built Vilnius as the capital and invited European "
             "craftsmen, merchants, and monks to settle there. Expanded Lithuanian territory "
-            "through diplomacy and conquest, incorporating much of modern Belarus. Famous "
-            "for his letters to Pope John XXII and Hanseatic cities promoting trade and "
-            "religious tolerance."
+            "through diplomacy and conquest. Famous for his letters to Pope John XXII and " 
+            "Hanseatic cities promoting trade and religious tolerance."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Seal of Gediminas (c. 1323)",
                 "description": "",
@@ -194,7 +222,7 @@ RULER_DATA = {
         "bio": (
             "Algirdas, Grand Duke of Lithuania from 1345 to 1377, was one of the most powerful rulers of medieval Lithuania. Together with his brother Kęstutis, he secured the Grand Duchy’s position between the Teutonic Order, Muscovy and the lands of Rus’. His reign saw major eastern and southern expansion, making Lithuania one of the largest states in Europe and preparing the ground for the later Jagiellonian dynasty through his son Jogaila"
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Equestrian Seal of Algirdas",
                 "description": "",
@@ -212,7 +240,7 @@ RULER_DATA = {
             "Renowned for decades of resistance against the Teutonic Knights. "
             "Captured and murdered by his nephew Jogaila."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Equestrian Seal of Kęstutis",
                 "description": "",
@@ -230,7 +258,7 @@ RULER_DATA = {
             "in 1387. Decisive victory at the Battle of Grunwald (1410) against the "
             "Teutonic Order together with Vytautas."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Grand Ducal Seal of Lithuania (Vytis, c. 1386)",
                 "description": "",
@@ -256,7 +284,7 @@ RULER_DATA = {
             "when he was displaced by Skirgaila. Issued his own coinage — half-grosz pieces "
             "struck at the Kyiv mint, among the earliest coins of the Grand Duchy of Lithuania."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Dynastic Seal of Vladimir Olgerdovich",
                 "description": "",
@@ -274,7 +302,7 @@ RULER_DATA = {
             "from the Baltic to the Black Sea. Led allied forces at Grunwald (1410). "
             "Sought a royal crown but died before coronation."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Great Seal of Vytautas",
                 "description": "",
@@ -300,7 +328,7 @@ RULER_DATA = {
             "in Lithuania after Jogaila became King of Poland. Suppressed Vytautas's "
             "early revolts before eventually yielding power to him."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Ducal Seal of Skirgaila",
                 "description": "",
@@ -317,7 +345,7 @@ RULER_DATA = {
         "bio": (
             "Casimir IV Jagiellon, Grand Duke of Lithuania from 1440 and King of Poland from 1447, ruled until his death in 1492. During his reign, the Thirteen Years’ War with the Teutonic Order ended with the Second Peace of Toruń in 1466, bringing Royal Prussia under the Polish Crown and reducing the remaining Teutonic state to a Polish fief."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius Regni Poloniae)",
                 "description": "",
@@ -341,7 +369,7 @@ RULER_DATA = {
         "bio": (
             "Alexander Jagiellon, Grand Duke of Lithuania from 1492 and King of Poland from 1501, ruled amid Muscovite and Tatar pressure on the Grand Duchy’s frontiers. His reign marked an important step in Lithuanian monetary history: the reform of 1495 introduced a decimal system based on the groat counted as 10 denars and brought Lithuanian coinage closer to contemporary western European monetary standards. Denars and half-groats were struck in Vilnius, while the full groat appeared only later, under Sigismund the Old."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Great Royal Seal of Poland",
                 "description": "",
@@ -365,7 +393,7 @@ RULER_DATA = {
         "bio": (
             "Sigismund I the Old, King of Poland and Grand Duke of Lithuania from 1506 to 1548, was a major Renaissance ruler of the Jagiellonian dynasty. His reign saw cultural flourishing in the Polish-Lithuanian lands and important monetary reforms that brought coinage closer to contemporary European standards. Continuing the reform begun under Alexander Jagiellon, Sigismund’s rule saw dated Lithuanian half-groats from 1509 (1508(?)) and the first Lithuanian groats minted in Vilnius in 1535–1536."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
                 "description": "",
@@ -389,7 +417,7 @@ RULER_DATA = {
         "bio": (
             "Sigismund II Augustus, the last male Jagiellonian ruler, governed Lithuania from 1544 and ruled as King of Poland and Grand Duke of Lithuania from 1548 to 1572. His reign culminated in the Union of Lublin of 1569, which created the Polish-Lithuanian Commonwealth. A distinguished Renaissance patron and collector, he assembled a celebrated tapestry collection and fostered a refined court culture. In numismatic history, his rule marks one of the richest periods of Lithuanian coinage: the Vilnius mint issued an exceptional variety of denominations, notable not only for their monetary importance but also for their increasingly artful, European-style execution."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Great Royal Seal (Sigillum Maius Regni Poloniae)",
                 "description": "",
@@ -417,7 +445,7 @@ RULER_DATA = {
         "bio": (
             "Stephen Báthory, Prince of Transylvania and elected ruler of the Polish-Lithuanian Commonwealth, reigned as King of Poland and Grand Duke of Lithuania from 1576 to 1586. Renowned as an energetic and capable military commander, he successfully challenged Ivan IV of Muscovy in the final phase of the Livonian War, recovering Polotsk and securing the Commonwealth’s position in Livonia. His reign also left a lasting cultural legacy in Lithuania: in 1579 he granted the privilege establishing the Vilnius Academy, the foundation of today’s Vilnius University."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Great Royal Seal of Poland",
                 "description": "",
@@ -441,7 +469,7 @@ RULER_DATA = {
         "bio": (
             "Sigismund III Vasa, Grand Duke of Lithuania and King of Poland from 1587 to 1632, was the first Vasa ruler of the Polish-Lithuanian Commonwealth. His reign was shaped in part by dynastic conflict with Sweden and by wars with Muscovy, in which the Grand Duchy of Lithuania played a significant role. In Lithuanian numismatic history, his rule is notable for the continued activity of the Vilnius Mint, which produced a broad range of denominations, including double-denarii, shillings, groats, one-and-a-half-groats, three-groats, and prestigious gold issues of 1, 5, and 10 ducats."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
                 "description": "",
@@ -471,7 +499,7 @@ RULER_DATA = {
             "of his father. Won the Smolensk War against Russia and was renowned as an "
             "enlightened and cultured monarch."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
                 "description": "",
@@ -495,7 +523,7 @@ RULER_DATA = {
         "bio": (
             "John II Casimir Vasa, Grand Duke of Lithuania and King of Poland from 1648 to 1668, was the last Vasa ruler of the Polish-Lithuanian Commonwealth. His reign was shaped by major wars with the Cossacks, Muscovy and Sweden. Numismatically, it is notable for the mass issue of copper shillings, the boratynki, struck in large quantities at Vilnius and Kaunas to support wartime finances. He abdicated in 1668."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
                 "description": "",
@@ -527,7 +555,7 @@ RULER_DATA = {
             "founding the Meissen porcelain manufactory and for his extraordinary art "
             "collections that enriched Dresden's cultural heritage."
         ),
-        "seals": [
+        "graphical_materials": [
             {
                 "name": "Great Royal Seal of Poland (Sigillum Maius)",
                 "description": "",
@@ -547,7 +575,7 @@ RULER_DATA = {
         "bio": (
             "The Republic of Lithuania restored its modern statehood on 16 February 1918, when the Council of Lithuania (Lietuvos Taryba) signed the Act of Independence in Vilnius. The interwar republic established its own national currency: the litas, divided into 100 centai, was introduced in 1922. The first Lithuanian coins entered circulation in 1925, with bronze denominations struck at King’s Norton Metal Works in Birmingham and silver denominations at the Royal Mint in London; from 1936, coins were also struck in Kaunas at the Spindulys mint. Designed by Juozas Zikaras, the coins featured national symbols such as the Vytis and the Columns of Gediminas, together with plant and agricultural motifs reflecting the cultural and economic character of the young state. Unfortunatelly, Lithuania’s independent interwar statehood was interrupted by the Soviet occupation of June 1940."
         ),
-        "seals": [],
+        "graphical_materials": [],
     },
     "Lietuvos Respublika (from 1990)": {
         "portrait": "flag_lithuania.png",
@@ -558,12 +586,12 @@ RULER_DATA = {
         "bio": (
             "The Republic of Lithuania re-established its independence on 11 March 1990, when the Supreme Council of the Republic of Lithuania adopted the Act of the Re-Establishment of the State of Lithuania. The litas returned to circulation on 25 June 1993, replacing the provisional talonas, and was divided into 100 centai. Modern Lithuanian coinage continued the use of national symbols, especially the Vytis and the Columns of Gediminas, while the restored Lithuanian Mint in Vilnius became the main centre for striking Lithuanian circulation and collector coins. In 2015 Lithuania adopted the euro; Lithuanian euro coins bear the Vytis on the national side."
         ),
-        "seals": [],
+        "graphical_materials": [],
     },
 }
 
 
-_migrate_seal_storage()
+_migrate_graphical_materials()
 
 
 # ── Collection overview ────────────────────────────────────────────────────────
@@ -609,13 +637,13 @@ def index():
         merged["custom_notes"] = db_rulers.get(rname, {}).get("notes", "")
         ruler_display[rname] = merged
 
-    # Build ruler seals dict for JS
-    ruler_seals = {}
+    # Build ruler graphics dict for JS
+    ruler_graphics = {}
     for rname in ruler_display:
-        seals_list = models.get_ruler_seals(rname)
-        ruler_seals[rname] = [
+        gfx_list = models.get_ruler_graphics(rname)
+        ruler_graphics[rname] = [
             {"index": i, "name": s["name"], "image": s.get("image")}
-            for i, s in enumerate(seals_list)
+            for i, s in enumerate(gfx_list)
         ]
 
     return render_template(
@@ -639,7 +667,7 @@ def index():
         per_page=per_page,
         ruler_data=ruler_display,
         ruler_counts=ruler_counts,
-        ruler_seals=ruler_seals,
+        ruler_graphics=ruler_graphics,
     )
 
 
@@ -846,118 +874,42 @@ def ruler_edit(ruler_name):
         ruler_name=ruler_name,
         ruler=static_data,
         current_notes=current_notes,
-        seals=models.get_ruler_seals(ruler_name),
-        coats_of_arms=models.get_ruler_coats(ruler_name),
+        graphical_materials=models.get_ruler_graphics(ruler_name),
         meta=models.get_meta(),
     )
 
 
-# ── Seal CRUD ─────────────────────────────────────────────────────────────────
+# ── Graphical Material CRUD ───────────────────────────────────────────────────
 
-@app.route("/ruler/<path:ruler_name>/seal/add", methods=["POST"])
-def ruler_seal_add(ruler_name):
+@app.route("/ruler/<path:ruler_name>/graphic/add", methods=["POST"])
+def ruler_graphic_add(ruler_name):
     if ruler_name not in RULER_DATA:
         return jsonify({"error": "Issuer not found"}), 404
     name = request.form.get("name", "").strip()
     if not name:
         return jsonify({"error": "Name required"}), 400
-    idx = models.add_ruler_seal(ruler_name, name)
+    idx = models.add_ruler_graphic(ruler_name, name)
     return jsonify({"index": idx, "name": name})
 
 
-@app.route("/ruler/<path:ruler_name>/seal/<int:seal_idx>/rename", methods=["POST"])
-def ruler_seal_rename(ruler_name, seal_idx):
+@app.route("/ruler/<path:ruler_name>/graphic/<int:gfx_idx>/rename", methods=["POST"])
+def ruler_graphic_rename(ruler_name, gfx_idx):
     if ruler_name not in RULER_DATA:
         return jsonify({"error": "Issuer not found"}), 404
     name = request.form.get("name", "").strip()
     if not name:
         return jsonify({"error": "Name required"}), 400
-    if not models.rename_ruler_seal(ruler_name, seal_idx, name):
-        return jsonify({"error": "Seal not found"}), 404
+    if not models.rename_ruler_graphic(ruler_name, gfx_idx, name):
+        return jsonify({"error": "Item not found"}), 404
     return jsonify({"ok": True, "name": name})
 
 
-@app.route("/ruler/<path:ruler_name>/seal/<int:seal_idx>/upload", methods=["POST"])
-def ruler_seal_upload(ruler_name, seal_idx):
+@app.route("/ruler/<path:ruler_name>/graphic/<int:gfx_idx>/upload", methods=["POST"])
+def ruler_graphic_upload(ruler_name, gfx_idx):
     if ruler_name not in RULER_DATA:
         return jsonify({"error": "Issuer not found"}), 404
-    seals = models.get_ruler_seals(ruler_name)
-    if seal_idx < 0 or seal_idx >= len(seals):
-        return jsonify({"error": "Seal index out of range"}), 400
-    f = request.files.get("image")
-    if not f or not f.filename:
-        return jsonify({"error": "No file"}), 400
-    if not allowed_file(f.filename):
-        return jsonify({"error": "Invalid file type"}), 400
-    ext = f.filename.rsplit(".", 1)[1].lower()
-    safe_ruler = secure_filename(ruler_name.replace(" ", "_").replace("/", "_"))
-    fname = f"seal_{safe_ruler}_{seal_idx}_{uuid.uuid4().hex[:6]}.{ext}"
-    fpath = SEALS_FOLDER / fname
-    f.save(str(fpath))
-    _fix_exif_rotation(fpath)
-    old = models.set_ruler_seal_image_db(ruler_name, seal_idx, fname)
-    if old:
-        old_path = SEALS_FOLDER / old
-        if old_path.exists():
-            old_path.unlink()
-    return jsonify({"filename": fname, "url": f"/static/seals/{fname}"})
-
-
-@app.route("/ruler/<path:ruler_name>/seal/<int:seal_idx>/delete_image", methods=["POST"])
-def ruler_seal_delete_image(ruler_name, seal_idx):
-    if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Issuer not found"}), 404
-    old = models.remove_ruler_seal_image_db(ruler_name, seal_idx)
-    if old:
-        old_path = SEALS_FOLDER / old
-        if old_path.exists():
-            old_path.unlink()
-    return jsonify({"ok": True})
-
-
-@app.route("/ruler/<path:ruler_name>/seal/<int:seal_idx>/delete", methods=["POST"])
-def ruler_seal_delete(ruler_name, seal_idx):
-    if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Issuer not found"}), 404
-    old_image = models.delete_ruler_seal(ruler_name, seal_idx)
-    if old_image:
-        old_path = SEALS_FOLDER / old_image
-        if old_path.exists():
-            old_path.unlink()
-    return jsonify({"ok": True})
-
-
-# ── Coat of Arms CRUD ─────────────────────────────────────────────────────────
-
-@app.route("/ruler/<path:ruler_name>/coat/add", methods=["POST"])
-def ruler_coat_add(ruler_name):
-    if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Issuer not found"}), 404
-    name = request.form.get("name", "").strip()
-    if not name:
-        return jsonify({"error": "Name required"}), 400
-    idx = models.add_ruler_coat(ruler_name, name)
-    return jsonify({"index": idx, "name": name})
-
-
-@app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/rename", methods=["POST"])
-def ruler_coat_rename(ruler_name, coat_idx):
-    if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Issuer not found"}), 404
-    name = request.form.get("name", "").strip()
-    if not name:
-        return jsonify({"error": "Name required"}), 400
-    if not models.rename_ruler_coat(ruler_name, coat_idx, name):
-        return jsonify({"error": "Coat of arms not found"}), 404
-    return jsonify({"ok": True, "name": name})
-
-
-@app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/upload", methods=["POST"])
-def ruler_coat_upload(ruler_name, coat_idx):
-    if ruler_name not in RULER_DATA:
-        return jsonify({"error": "Issuer not found"}), 404
-    coats = models.get_ruler_coats(ruler_name)
-    if coat_idx < 0 or coat_idx >= len(coats):
+    items = models.get_ruler_graphics(ruler_name)
+    if gfx_idx < 0 or gfx_idx >= len(items):
         return jsonify({"error": "Index out of range"}), 400
     f = request.files.get("image")
     if not f or not f.filename:
@@ -966,37 +918,37 @@ def ruler_coat_upload(ruler_name, coat_idx):
         return jsonify({"error": "Invalid file type"}), 400
     ext = f.filename.rsplit(".", 1)[1].lower()
     safe_ruler = secure_filename(ruler_name.replace(" ", "_").replace("/", "_"))
-    fname = f"coat_{safe_ruler}_{coat_idx}_{uuid.uuid4().hex[:6]}.{ext}"
-    fpath = COATS_FOLDER / fname
+    fname = f"gfx_{safe_ruler}_{gfx_idx}_{uuid.uuid4().hex[:6]}.{ext}"
+    fpath = GRAPHICS_FOLDER / fname
     f.save(str(fpath))
     _fix_exif_rotation(fpath)
-    old = models.set_ruler_coat_image_db(ruler_name, coat_idx, fname)
+    old = models.set_ruler_graphic_image_db(ruler_name, gfx_idx, fname)
     if old:
-        old_path = COATS_FOLDER / old
+        old_path = GRAPHICS_FOLDER / old
         if old_path.exists():
             old_path.unlink()
-    return jsonify({"filename": fname, "url": f"/static/coats_of_arms/{fname}"})
+    return jsonify({"filename": fname, "url": f"/static/graphical_materials/{fname}"})
 
 
-@app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/delete_image", methods=["POST"])
-def ruler_coat_delete_image(ruler_name, coat_idx):
+@app.route("/ruler/<path:ruler_name>/graphic/<int:gfx_idx>/delete_image", methods=["POST"])
+def ruler_graphic_delete_image(ruler_name, gfx_idx):
     if ruler_name not in RULER_DATA:
         return jsonify({"error": "Issuer not found"}), 404
-    old = models.remove_ruler_coat_image_db(ruler_name, coat_idx)
+    old = models.remove_ruler_graphic_image_db(ruler_name, gfx_idx)
     if old:
-        old_path = COATS_FOLDER / old
+        old_path = GRAPHICS_FOLDER / old
         if old_path.exists():
             old_path.unlink()
     return jsonify({"ok": True})
 
 
-@app.route("/ruler/<path:ruler_name>/coat/<int:coat_idx>/delete", methods=["POST"])
-def ruler_coat_delete(ruler_name, coat_idx):
+@app.route("/ruler/<path:ruler_name>/graphic/<int:gfx_idx>/delete", methods=["POST"])
+def ruler_graphic_delete(ruler_name, gfx_idx):
     if ruler_name not in RULER_DATA:
         return jsonify({"error": "Issuer not found"}), 404
-    old_image = models.delete_ruler_coat(ruler_name, coat_idx)
+    old_image = models.delete_ruler_graphic(ruler_name, gfx_idx)
     if old_image:
-        old_path = COATS_FOLDER / old_image
+        old_path = GRAPHICS_FOLDER / old_image
         if old_path.exists():
             old_path.unlink()
     return jsonify({"ok": True})
@@ -1024,13 +976,12 @@ def export_pdf():
     meta = models.get_meta()
     db_rulers = models.get_rulers()
 
-    # Build full ruler info for PDF (static defaults + editable notes + seals)
+    # Build full ruler info for PDF (static defaults + editable notes + graphics)
     ruler_info_for_pdf = {}
     for rname, rdata in RULER_DATA.items():
         merged = dict(rdata)
         merged["custom_notes"] = db_rulers.get(rname, {}).get("notes", "")
-        merged["seals"] = models.get_ruler_seals(rname)
-        merged["coats_of_arms"] = models.get_ruler_coats(rname)
+        merged["graphical_materials"] = models.get_ruler_graphics(rname)
         ruler_info_for_pdf[rname] = merged
 
     pdf_bytes = pdf_generator.generate_pdf(
