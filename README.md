@@ -7,6 +7,9 @@ How to run:
 - 2.) cd opengdl
 - 3.) consult: README.txt for further steps (on Windows OS not tested yet)
 
+Also, you should install git and docker, in order to clone this repository, and build and run docker image of this app.
+
+
 Screenshots:
 
 <img src="Screenshot%20from%202026-04-30%2022-13-23.png" alt="Example 1" title="Example 1" width="50%">
