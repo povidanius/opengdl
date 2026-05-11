@@ -21,7 +21,7 @@ Screenshots:
 
 
 
-## References and Further Reading
+## Catalogue References and Further Reading about Lithuanian Numismatics
 
 1. **E. Ivanauskas** (2013). *Coins and Bars of Lithuania 1236–2012 / Монеты и слитки Литвы 1236–2012*. Kaunas: Eugenijus Ivanauskas.  
    ISBNs: `978-9955-772-48-4`, `978-9955-772-49-1`, `978-9955-772-50-7`  
