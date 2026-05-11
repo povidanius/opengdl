@@ -1,6 +1,6 @@
 This is a Python app for a free, open-source personal numismatic catalogue of coins from the Grand Duchy of Lithuania and the Republic of Lithuania, designed to run locally on a collector’s PC.It is almost entirely coded using Claude Code. Still a very early version, but you may find it useful for organising your collection.
 
-This project is currently a work in progress - this version may be not fully compatible with previous or future versions, so if you are using it for your collection **please back up ./uploads and ./data folders before any further git pull from this repo**. Updates about its possible release with fully compatible formats may be posted on this page in the future. At this stage, only publicly available images and sources have been used. With permission from the respective authors, additional graphical material may be included in the future.
+This project is currently a work in progress - this version may be not fully compatible with previous or future versions, so if you are using it for your collection **please back up your catalogue before any further git pull from this repo**. Updates about its possible release with fully compatible formats may be posted on this page in the future. At this stage, only publicly available images and sources have been used. With permission from the respective authors, additional graphical material may be included in the future.
 
 How to run:
 
