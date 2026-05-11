@@ -36,7 +36,7 @@ Screenshots:
     ISBN: `978-609-417-285-4`  
     Link: [MDL Coins](https://www.mdlcoins.lt/parduotuve/literatura/katalogas-lithuanian-coins-1495-1536-second-edition/)
        
-4. 8. **D. Huletski** (2022). *Lithuanian Grand Ducal Coins before 1401*. Vilnius: Baltijos kopija.  
+4. **D. Huletski** (2022). *Lithuanian Grand Ducal Coins before 1401*. Vilnius: Baltijos kopija.  
    ISBN: `978-609-417-240-3`  
    Links: [Sena.lt](https://www.sena.lt/istorija/lithuanian-grand-ducal-coins-before-1401/2351092), [DeaMoneta](https://www.deamoneta.com/shop/item/huletski-lithuanian-grand-ducal-coins-before-1401)
    
