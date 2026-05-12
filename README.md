@@ -3,7 +3,7 @@ This is a Python app for a free, open-source personal numismatic catalogue of co
 This project is currently a work in progress - this version may not be fully compatible with previous or future versions, so if you are using it for your collection, I recommend backing up your catalogue before pulling future updates. At this stage, only publicly available images and sources (from Wikipedia) have been used. With permission from the respective authors, additional graphical material may be included in the future.
 
 How to run:
-- 0.)  Open a terminal (Linux) or Command Prompt / PowerShell (Windows, on Windows OS not tested yet)
+- 0.)  Open a terminal (Linux) or Command Prompt (Windows, on Windows OS not tested yet)
 - 1.) git clone https://github.com/povidanius/opengdl/
 - 2.) cd opengdl
 - 3.) docker build -t coin-collection .
