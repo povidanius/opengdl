@@ -65,6 +65,6 @@ Screenshots:
 
 ## Video Resources
 
-- **Vilnius Coinage of Alexander and Sigismund the Old**. YouTube channel.  
+- **Vilnius Coinage of Alexander and Sigismund the Old**. YouTube channel (G. Bagdonas).  
   Link: [YouTube](https://www.youtube.com/@vilniuscoinageofalexandera4032)   
   
