@@ -3,10 +3,23 @@ This is a Python app for a free, open-source personal numismatic catalogue of co
 This project is currently a work in progress - this version may not be fully compatible with previous or future versions, so if you are using it for your collection, I recommend backing up your catalogue before pulling future updates. At this stage, only publicly available images and sources (from Wikipedia) have been used. With permission from the respective authors, additional graphical material may be included in the future.
 
 How to run:
-
+- 0.)  Open a terminal (Linux) or Command Prompt / PowerShell (Windows, on Windows OS not tested yet)
 - 1.) git clone https://github.com/povidanius/opengdl/
 - 2.) cd opengdl
-- 3.) consult: README.txt for further steps (on Windows OS not tested yet)
+- 3.) docker build -t coin-collection .
+- 4.) Run the container:
+   ```
+docker run -d --name coins \
+  -p 5000:5000 \
+  -v "$(pwd)/data:/app/data" \
+  -v "$(pwd)/uploads:/app/uploads" \
+  coin-collection
+```
+- 5.) Point your web browser to `http://127.0.0.1:5000/`
+- 6.) To stop the running container: docker stop coins
+- 7.) To start it: docker start coins
+ -8.) To remove it: docker rm coins
+- 9.) consult: README.txt for more information
 
 Also, you should install git and docker, in order to clone this repository, and build and run docker image of this app.
 
