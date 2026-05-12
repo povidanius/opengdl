@@ -20,7 +20,7 @@ Screenshots:
 
 
 
-## Catalogue References and Further Reading about Lithuanian Numismatics
+## Catalogue References and Books about Lithuanian Numismatics
 
 1. **E. Ivanauskas** (2013). *Coins and Bars of Lithuania 1236–2012 / Монеты и слитки Литвы 1236–2012*. Kaunas: Eugenijus Ivanauskas.  
    ISBNs: `978-9955-772-48-4`, `978-9955-772-49-1`, `978-9955-772-50-7`  
@@ -46,4 +46,13 @@ Screenshots:
 6. **E. Česnulis and E. Ivanauskas** (2018). *Lithuanian Coins of Sigismund August, 1545–1571*. Revised 2nd ed. Vilnius: Netimeras.  
    ISBN: `978-609-95987-1-0`  
    Link: [Knygos.lt](https://www.knygos.lt/lt/knygos/lithuanian-coins-of-sigismund-august--1545-1571/)
+
+7. **D. Grimalauskaitė and E. Remecas** (2020). *Money in Lithuania*. Vilnius: Lietuvos nacionalinis muziejus.  
+   ISBN: `978-609-478-049-3`  
+   Link: [Knygos.lt](https://www.knygos.lt/lt/knygos/money-in-lithuania/)
+
+## Video Resources
+
+- **Vilnius Coinage of Alexander and Sigismund the Old**. YouTube channel.  
+  Link: [YouTube](https://www.youtube.com/@vilniuscoinageofalexandera4032)   
   
