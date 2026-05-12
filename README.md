@@ -8,8 +8,8 @@ How to run:
 - 2.) cd opengdl
 - 3.) docker build -t coin-collection .
 - 4.) Run the container:
-   ```
-docker run -d --name coins \
+   ```bash
+   docker run -d --name coins \
   -p 5000:5000 \
   -v "$(pwd)/data:/app/data" \
   -v "$(pwd)/uploads:/app/uploads" \
