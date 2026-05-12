@@ -17,7 +17,7 @@ How to run:
 - 5.) Point your web browser to `http://127.0.0.1:5000/`
 - 6.) To stop the running container: docker stop coins
 - 7.) To start it: docker start coins
- -8.) To remove it: docker rm coins
+- 8.) To remove it: docker rm coins
 - 9.) consult: README.txt for more information
 
 Also, you should install git and docker, in order to clone this repository, and build and run docker image of this app.
