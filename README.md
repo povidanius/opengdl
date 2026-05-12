@@ -8,12 +8,20 @@ How to run:
 - 2.) cd opengdl
 - 3.) docker build -t coin-collection .
 - 4.) Run the container:
+  -- Linux:
    ```bash
    docker run -d --name coins \
   -p 5000:5000 \
   -v "$(pwd)/data:/app/data" \
   -v "$(pwd)/uploads:/app/uploads" \
   coin-collection
+   -- Windows (not tested yet):
+   ```bash
+        docker run -d --name coins ^
+       -p 5000:5000 ^
+       -v "%cd%/data:/app/data" ^
+       -v "%cd%/uploads:/app/uploads" ^
+       coin-collection
 - 5.) Point your web browser to `http://127.0.0.1:5000/`
 - 6.) To stop the running container: docker stop coins
 - 7.) To start it: docker start coins
