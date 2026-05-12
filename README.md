@@ -39,7 +39,7 @@ Screenshots:
    Link: [MDL Coins](https://www.mdlcoins.lt/parduotuve/literatura/katalogas-coins-and-bars-of-lithuania-1236-2012/)
 
 
-2. **E. Ivanauskas and E. Česnulis** (2024). *Lietuviškos Gediminaičių monetos, 1345–1492 m.* Vilnius: Netimeras.  
+2. **E. Česnulis and E. Ivanauskas** (2024). *Lietuviškos Gediminaičių monetos, 1345–1492 m.* Vilnius: Netimeras.  
    ISBN: `978-609-95987-8-9`  
    Links: [Knygos.lt](https://www.knygos.lt/lt/knygos/lietuviskos-gediminaiciu-monetos--1345-1492/), [MDL Coins](https://www.mdlcoins.lt/parduotuve/literatura/knyga-katalogas-lietuviskos-gediminaiciu-monetos-1345-1492-m/)
 
