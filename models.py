@@ -32,6 +32,10 @@ RULER_REIGN_START = {
     "Sigismund III Vasa":             1587,
     "Władysław IV Vasa":              1632,
     "John II Casimir Vasa":           1648,
+    "Švitrigaila":                    1430,
+    "Augustus II the Strong":         1697,
+    "Lietuvos Respublika (1918–1940)": 1918,
+    "Lietuvos Respublika (from 1990)": 1990,
 }
 
 # Denomination sort order by ascending face value

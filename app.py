@@ -132,6 +132,7 @@ def _prefill_options():
         "Vladimir Olgerdovich",
         "Vytautas the Great",
         "Skirgaila",
+        "Švitrigaila",
 
         "Casimir IV Jagiellon",
         "Alexander Jagiellon",
@@ -334,6 +335,24 @@ RULER_DATA = {
                 "description": "",
             },
         ],
+    },
+    "Švitrigaila": {
+        "portrait": "portrait_svitrigaila.jpg",
+        "full_name": "Švitrigaila (Bolesław)",
+        "reign": "1430–1432",
+        "born": "c. 1370",
+        "died": "1452",
+        "bio": (
+            "Švitrigaila, son of Grand Duke Algirdas and his second wife Uliana of Tver, "
+            "was Grand Duke of Lithuania from 1430 to 1432. Upon Vytautas's death in October "
+            "1430, Lithuanian nobles unilaterally elected him Grand Duke, in violation of the "
+            "Union of Horodło (1413). He spent most of his life in largely unsuccessful "
+            "dynastic struggles against his cousins Vytautas and Sigismund Kęstutaitis. "
+            "After the decisive defeat at the Battle of Pabaiskas (Wiłkomierz) in 1435, "
+            "Švitrigaila lost effective power and lived out his remaining years holding "
+            "Lutsk and several Volhynian towns until his death in 1452."
+        ),
+        "graphical_materials": [],
     },
 
     "Casimir IV Jagiellon": {

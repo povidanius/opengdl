@@ -12,7 +12,7 @@
 <nav class="navbar">
   <div class="nav-brand">
     <a href="{{ url_for('index') }}" class="brand-link">
-      <span class="brand-icon">⚜</span>
+      <img class="brand-icon" src="{{ url_for('static', filename='img/columns_gold.png') }}" alt="Columns of Gediminas">
       <span class="brand-name">{{ meta.collection_name }}</span>
     </a>
   </div>
@@ -48,12 +48,14 @@
   <span>Grand Duchy of Lithuania · Numismatic Collection Manager</span>
   {% if meta.owner %}
     <span class="footer-sep">·</span>
-    <span>{{ meta.owner }}</span>
+    <span>Collection of {{ meta.owner }}</span>
   {% endif %}
   {% if meta.confidential %}
     <span class="footer-sep">·</span>
     <span class="footer-confidential">Confidential</span>
   {% endif %}
+  <br>
+  <span class="footer-author">Catalogue software <a href="https://github.com/povidanius/opengdl" target="_blank">https://github.com/povidanius/opengdl</a></span>
 </footer>
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
