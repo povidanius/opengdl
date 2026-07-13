@@ -1,6 +1,7 @@
 This is a Python app for a free, open-source personal numismatic catalogue of coins from the Grand Duchy of Lithuania and the Republic of Lithuania, designed to run locally on a collector’s PC. It is almost entirely coded using Claude Code. Still a very early version, but you may find it useful for organising your collection.
 
-This project is currently a work in progress - this version may not be fully compatible with previous or future versions, so if you are using it for your collection, I recommend backing up your catalogue before pulling future updates. At this stage, only publicly available images and sources (from Wikipedia) have been used. With permission from the respective authors, additional graphical material may be included in the future. This software was tested on Linux (Ubuntu 22.04) and Windows 11.
+This project is currently a work in progress - this version may not be fully compatible with previous or future versions, so if you are using it for your collection, I recommend backing up your catalogue before pulling future updates. At this stage, only publicly available images and sources (from Wikipedia) have been used. With permission from the respective authors, additional graphical material may be included in the future. This software was tested on Linux (Ubuntu 22.04) and Windows 11. Please install [git]{https://git-scm.com/install/} and [Docker]{https://docs.docker.com/desktop/setup/install/windows-install/}, in order to clone this repository, and build and run docker image of this app.
+
 
 How to run:
 - 0.)  Open a terminal (Linux) or Command Prompt (e.g. Windows)
@@ -31,8 +32,6 @@ How to run:
 - 7.) To start it: docker start coins
 - 8.) To remove it: docker rm coins
 - 9.) consult: README.txt for more information
-
-Also, you should install git and docker, in order to clone this repository, and build and run docker image of this app.
 
 
 Screenshots:
