@@ -1,9 +1,9 @@
 This is a Python app for a free, open-source personal numismatic catalogue of coins from the Grand Duchy of Lithuania and the Republic of Lithuania, designed to run locally on a collector’s PC. It is almost entirely coded using Claude Code. Still a very early version, but you may find it useful for organising your collection.
 
-This project is currently a work in progress - this version may not be fully compatible with previous or future versions, so if you are using it for your collection, I recommend backing up your catalogue before pulling future updates. At this stage, only publicly available images and sources (from Wikipedia) have been used. With permission from the respective authors, additional graphical material may be included in the future.
+This project is currently a work in progress - this version may not be fully compatible with previous or future versions, so if you are using it for your collection, I recommend backing up your catalogue before pulling future updates. At this stage, only publicly available images and sources (from Wikipedia) have been used. With permission from the respective authors, additional graphical material may be included in the future. This software was tested on Linux (Ubuntu 22.04) and Windows 11.
 
 How to run:
-- 0.)  Open a terminal (Linux) or Command Prompt (Windows, on Windows OS not tested yet)
+- 0.)  Open a terminal (Linux) or Command Prompt (e.g. Windows)
 - 1.) git clone https://github.com/povidanius/opengdl/
 - 2.) cd opengdl
 - 3.) docker build -t coin-collection .
@@ -17,7 +17,7 @@ How to run:
   coin-collection
    ```
    
-   - From Windows (not tested yet):
+   - From Windows:
    ```bash
         docker run -d --name coins ^
        -p 5000:5000 ^
@@ -25,6 +25,7 @@ How to run:
        -v "%cd%/uploads:/app/uploads" ^
        coin-collection
     ```
+    you may need to run ```wsl --update``` before building Docker container.
 - 5.) Point your web browser to `http://127.0.0.1:5000/`
 - 6.) To stop the running container: docker stop coins
 - 7.) To start it: docker start coins
