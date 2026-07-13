@@ -34,7 +34,7 @@ How to run:
 - 9.) consult: README.txt for more information
 
 
-Screenshots:
+Screenshots (images from my personal collection):
 
 <img src="Screenshot%20from%202026-04-30%2022-13-23.png" alt="Example 1" title="Example 1" width="50%">
 
