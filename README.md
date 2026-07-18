@@ -40,7 +40,9 @@ Screenshots (coin images from my personal collection):
 
 <img src="Screenshot%20from%202026-04-30%2022-13-35.png" alt="Example 2" title="Example 2" width="50%">
 
+## Android app
 
+[Android version (APK file)](https://drive.google.com/file/d/1sIkEFjWqKsDZnZiDmIDg4LzUM0vUoXm4/view?usp=sharing)
 
 
 ## Catalogue References and Books about Lithuanian Numismatics
